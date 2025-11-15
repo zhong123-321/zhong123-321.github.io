@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     <!-- GSAP for animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- html2canvas for image saving -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -193,15 +195,17 @@
     <div id="welcome-screen" class="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-primaryLight to-secondaryLight">
         <div class="max-w-md w-full bg-white rounded-2xl shadow-lg overflow-hidden">
             <div class="p-6 md:p-8">
-                <div class="flex justify-center mb-6">
+                <div class="flex justify-center mb-4">
                     <div class="flex items-center space-x-2">
-                        <span class="text-4xl font-bold text-energy">M</span>
-                        <span class="text-4xl font-bold text-cognition">B</span>
-                        <span class="text-4xl font-bold text-decision">T</span>
-                        <span class="text-4xl font-bold text-lifestyle">I</span>
+                        <span class="text-4xl md:text-5xl font-bold text-energy">M</span>
+                        <span class="text-4xl md:text-5xl font-bold text-cognition">B</span>
+                        <span class="text-4xl md:text-5xl font-bold text-decision">T</span>
+                        <span class="text-4xl md:text-5xl font-bold text-lifestyle">I</span>
                     </div>
                 </div>
-                <h1 class="text-2xl md:text-3xl font-bold text-center mb-2">MBTI深度解析套装</h1>
+                <h1 class="text-xl md:text-2xl font-bold text-center mb-1 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary animate-pulse-slow">星芒测评社</h1>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-4 rounded-full"></div>
+                <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">MBTI深度解析套装</h2>
                 <p class="text-gray-600 text-center mb-8">发现你的人格类型，解锁深度自我认知</p>
                 
                 <div class="space-y-4">
@@ -435,6 +439,366 @@
                     </div>
                 </div>
                 
+                <!-- Compatibility Analysis -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-heart"></i>
+                        </span>
+                        类型兼容性分析
+                    </h2>
+                    
+                    <div class="mb-6">
+                        <canvas id="compatibility-chart" height="250"></canvas>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="font-medium text-gray-800 mb-3">最佳匹配类型</h3>
+                        <div id="best-matches" class="grid grid-cols-2 gap-3">
+                            <!-- Best matches will be dynamically populated -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-800 mb-3">匹配分析</h3>
+                        <div id="compatibility-analysis" class="p-4 bg-purple-50 rounded-xl">
+                            <p class="text-sm text-purple-700">
+                                <!-- Compatibility analysis will be dynamically populated -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Type Comparison Tool -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-balance-scale"></i>
+                        </span>
+                        MBTI类型比较
+                    </h2>
+                    
+                    <div class="mb-6">
+                        <label for="compare-type" class="block text-sm font-medium text-gray-700 mb-2">选择要比较的MBTI类型</label>
+                        <select id="compare-type" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary">
+                            <option value="INFP">INFP - 调停者</option>
+                            <option value="INTJ">INTJ - 建筑师</option>
+                            <option value="INFJ">INFJ - 提倡者</option>
+                            <option value="INTP">INTP - 逻辑学家</option>
+                            <option value="ISFP">ISFP - 艺术家</option>
+                            <option value="ISTP">ISTP - 手艺人</option>
+                            <option value="ISFJ">ISFJ - 守护者</option>
+                            <option value="ISTJ">ISTJ - 检查员</option>
+                            <option value="ENFP">ENFP - 活动家</option>
+                            <option value="ENTP">ENTP - 辩论家</option>
+                            <option value="ENFJ">ENFJ - 教育家</option>
+                            <option value="ENTJ">ENTJ - 指挥官</option>
+                            <option value="ESFP">ESFP - 表演者</option>
+                            <option value="ESTP">ESTP - 企业家</option>
+                            <option value="ESFJ">ESFJ - 执政官</option>
+                            <option value="ESTJ">ESTJ - 总经理</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <canvas id="comparison-chart" height="250"></canvas>
+                    </div>
+                    
+                    <div id="type-comparison" class="p-4 bg-blue-50 rounded-xl">
+                        <h3 class="font-medium text-blue-800 mb-3">类型对比分析</h3>
+                        <p class="text-sm text-blue-700">
+                            <!-- Type comparison will be dynamically populated -->
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Cognitive Functions Analysis -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-cogs"></i>
+                        </span>
+                        认知功能分析
+                    </h2>
+                    
+                    <div class="mb-4">
+                        <p class="text-gray-600 mb-4" id="cognitive-description">
+                            <!-- Cognitive functions description will be dynamically populated -->
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="p-3 bg-blue-50 rounded-lg">
+                                <h3 class="font-medium text-blue-800 mb-2">主导功能</h3>
+                                <p class="text-sm text-blue-700" id="dominant-function">--</p>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg">
+                                <h3 class="font-medium text-green-800 mb-2">辅助功能</h3>
+                                <p class="text-sm text-green-700" id="auxiliary-function">--</p>
+                            </div>
+                            <div class="p-3 bg-yellow-50 rounded-lg">
+                                <h3 class="font-medium text-yellow-800 mb-2">第三功能</h3>
+                                <p class="text-sm text-yellow-700" id="tertiary-function">--</p>
+                            </div>
+                            <div class="p-3 bg-red-50 rounded-lg">
+                                <h3 class="font-medium text-red-800 mb-2">劣势功能</h3>
+                                <p class="text-sm text-red-700" id="inferior-function">--</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <h3 class="font-medium text-gray-800 mb-2">优势</h3>
+                                <ul class="list-disc list-inside space-y-1 text-sm text-gray-700" id="cognitive-strengths">
+                                    <!-- Strengths will be dynamically populated -->
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800 mb-2">盲点</h3>
+                                <ul class="list-disc list-inside space-y-1 text-sm text-gray-700" id="cognitive-blindspots">
+                                    <!-- Blindspots will be dynamically populated -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stress Response Patterns -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </span>
+                        压力反应模式
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-red-50 rounded-xl">
+                            <h3 class="font-medium text-red-800 mb-2">压力信号</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-red-700" id="stress-signs">
+                                <!-- Stress signs will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-yellow-50 rounded-xl">
+                            <h3 class="font-medium text-yellow-800 mb-2">常见压力源</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-yellow-700" id="stress-causes">
+                                <!-- Stress causes will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-green-50 rounded-xl">
+                            <h3 class="font-medium text-green-800 mb-2">应对策略</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-green-700" id="stress-strategies">
+                                <!-- Stress strategies will be dynamically populated -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Famous People Examples -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-star"></i>
+                        </span>
+                        著名人物案例
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="famous-people-container">
+                        <!-- Famous people will be dynamically populated -->
+                    </div>
+                </div>
+                
+                <!-- Development Stages -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-road"></i>
+                        </span>
+                        类型发展阶段
+                    </h2>
+                    
+                    <div class="relative">
+                        <!-- Timeline line -->
+                        <div class="absolute left-0 md:left-1/2 h-full w-0.5 bg-blue-200 transform md:translate-x-0 translate-x-4"></div>
+                        
+                        <div class="space-y-8" id="development-stages-container">
+                            <!-- Development stages will be dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cultural Perspectives -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-globe"></i>
+                        </span>
+                        跨文化视角
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-blue-50 rounded-xl">
+                            <h3 class="font-medium text-blue-800 mb-3 flex items-center">
+                                <i class="fa fa-flag mr-2"></i>
+                                西方文化
+                            </h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-blue-700" id="western-perspective">
+                                <!-- Western perspective will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-green-50 rounded-xl">
+                            <h3 class="font-medium text-green-800 mb-3 flex items-center">
+                                <i class="fa fa-flag mr-2"></i>
+                                东方文化
+                            </h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-green-700" id="eastern-perspective">
+                                <!-- Eastern perspective will be dynamically populated -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dynamic Changes -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-refresh"></i>
+                        </span>
+                        类型动态变化
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-purple-50 rounded-xl">
+                            <h3 class="font-medium text-purple-800 mb-3">成长路径</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-purple-700" id="growth-path">
+                                <!-- Growth path will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-pink-50 rounded-xl">
+                            <h3 class="font-medium text-pink-800 mb-3">典型变化</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-pink-700" id="typical-changes">
+                                <!-- Typical changes will be dynamically populated -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Learning Styles -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-graduation-cap"></i>
+                        </span>
+                        学习风格
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-green-50 rounded-xl">
+                            <h3 class="font-medium text-green-800 mb-2">学习优势</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-green-700" id="learning-strengths">
+                                <!-- Learning strengths will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-yellow-50 rounded-xl">
+                            <h3 class="font-medium text-yellow-800 mb-2">学习挑战</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-yellow-700" id="learning-challenges">
+                                <!-- Learning challenges will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-50 rounded-xl">
+                            <h3 class="font-medium text-blue-800 mb-2">学习策略</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-blue-700" id="learning-strategies">
+                                <!-- Learning strategies will be dynamically populated -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Health Patterns -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-heartbeat"></i>
+                        </span>
+                        健康模式
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-red-50 rounded-xl">
+                            <h3 class="font-medium text-red-800 mb-2">身体健康</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-red-700" id="physical-health">
+                                <!-- Physical health will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-50 rounded-xl">
+                            <h3 class="font-medium text-blue-800 mb-2">心理健康</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-blue-700" id="mental-health">
+                                <!-- Mental health will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-green-50 rounded-xl">
+                            <h3 class="font-medium text-green-800 mb-2">健康策略</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-green-700" id="health-strategies">
+                                <!-- Health strategies will be dynamically populated -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hobbies -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-gamepad"></i>
+                        </span>
+                        兴趣爱好
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="hobbies-container">
+                        <!-- Hobbies will be dynamically populated -->
+                    </div>
+                </div>
+                
+                <!-- Communication Styles -->
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-teal-500 text-white flex items-center justify-center mr-2">
+                            <i class="fa fa-comments"></i>
+                        </span>
+                        沟通风格
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-green-50 rounded-xl">
+                            <h3 class="font-medium text-green-800 mb-2">沟通优势</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-green-700" id="communication-strengths">
+                                <!-- Communication strengths will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-yellow-50 rounded-xl">
+                            <h3 class="font-medium text-yellow-800 mb-2">沟通挑战</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-yellow-700" id="communication-challenges">
+                                <!-- Communication challenges will be dynamically populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-50 rounded-xl">
+                            <h3 class="font-medium text-blue-800 mb-2">沟通策略</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-blue-700" id="communication-strategies">
+                                <!-- Communication strategies will be dynamically populated -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Growth Suggestions -->
                 <div class="p-6">
                     <h2 class="text-lg font-bold mb-4 flex items-center">
@@ -444,31 +808,8 @@
                         成长建议
                     </h2>
                     
-                    <div class="space-y-3">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mt-0.5">
-                                <span class="text-xs font-medium">1</span>
-                            </div>
-                            <p class="ml-3 text-sm text-gray-700">发展实际技能，平衡理想与现实</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mt-0.5">
-                                <span class="text-xs font-medium">2</span>
-                            </div>
-                            <p class="ml-3 text-sm text-gray-700">学会设定边界，避免过度牺牲自己</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mt-0.5">
-                                <span class="text-xs font-medium">3</span>
-                            </div>
-                            <p class="ml-3 text-sm text-gray-700">增强执行力，将想法转化为行动</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mt-0.5">
-                                <span class="text-xs font-medium">4</span>
-                            </div>
-                            <p class="ml-3 text-sm text-gray-700">接受批评和反馈，视为成长机会</p>
-                        </div>
+                    <div class="space-y-3" id="growth-tips-container">
+                        <!-- Growth tips will be dynamically populated -->
                     </div>
                 </div>
             </div>
@@ -960,12 +1301,98 @@
                 description: "INTP型的人是理性的思考者，具有强烈的好奇心和分析能力。他们善于思考复杂的问题，追求知识和理解。他们通常非常独立，重视智力上的自由和自主。",
                 image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
                 caption: "我是INTP逻辑学家人格！理性分析、好奇心强、思维敏捷。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #INTP #自我成长"
+            },
+            "ISFP": {
+                name: "艺术家",
+                traits: ["温和友善", "敏感细腻", "热爱生活"],
+                description: "ISFP型的人是温和友善的艺术家，善于表达自己的创造力和美感。他们敏感细腻，注重当下的体验，热爱生活中的美好事物。他们通常非常实际，善于处理具体问题。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ISFP艺术家人格！温和友善、敏感细腻、热爱生活。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ISFP #自我成长"
+            },
+            "ISTP": {
+                name: "手艺人",
+                traits: ["冷静客观", "动手能力强", "善于分析"],
+                description: "ISTP型的人是冷静客观的手艺人，善于解决实际问题。他们动手能力强，喜欢探索事物的工作原理，善于分析和解决复杂的机械或技术问题。他们通常非常独立，喜欢自己动手解决问题。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ISTP手艺人人格！冷静客观、动手能力强、善于分析。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ISTP #自我成长"
+            },
+            "ISFJ": {
+                name: "守护者",
+                traits: ["忠诚可靠", "富有同情心", "注重细节"],
+                description: "ISFJ型的人是忠诚可靠的守护者，善于照顾他人。他们富有同情心，注重细节，喜欢帮助他人解决实际问题。他们通常非常有责任感，善于组织和管理日常事务。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ISFJ守护者人格！忠诚可靠、富有同情心、注重细节。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ISFJ #自我成长"
+            },
+            "ISTJ": {
+                name: "检查员",
+                traits: ["严谨可靠", "注重事实", "善于组织"],
+                description: "ISTJ型的人是严谨可靠的检查员，善于组织和管理。他们注重事实和细节，喜欢按照规则和程序办事，善于制定和执行计划。他们通常非常有责任感，善于处理复杂的组织任务。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ISTJ检查员人格！严谨可靠、注重事实、善于组织。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ISTJ #自我成长"
+            },
+            "ENFP": {
+                name: "活动家",
+                traits: ["热情洋溢", "富有创造力", "善于沟通"],
+                description: "ENFP型的人是热情洋溢的活动家，善于激发他人的潜力。他们富有创造力，善于沟通，喜欢探索新的想法和可能性。他们通常非常乐观，善于激励和鼓舞他人。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ENFP活动家人格！热情洋溢、富有创造力、善于沟通。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ENFP #自我成长"
+            },
+            "ENTP": {
+                name: "辩论家",
+                traits: ["聪明机智", "善于辩论", "好奇心强"],
+                description: "ENTP型的人是聪明机智的辩论家，善于思考和辩论。他们好奇心强，喜欢挑战传统观念，善于发现问题并提出创新解决方案。他们通常非常善于言辞，喜欢与人交流和辩论。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ENTP辩论家人格！聪明机智、善于辩论、好奇心强。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ENTP #自我成长"
+            },
+            "ENFJ": {
+                name: "教育家",
+                traits: ["富有魅力", "善于沟通", "乐于助人"],
+                description: "ENFJ型的人是富有魅力的教育家，善于启发和引导他人。他们善于沟通，乐于助人，喜欢帮助他人发现自己的潜力。他们通常非常有同情心，善于理解他人的情感和需求。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ENFJ教育家人格！富有魅力、善于沟通、乐于助人。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ENFJ #自我成长"
+            },
+            "ENTJ": {
+                name: "指挥官",
+                traits: ["果断坚决", "善于领导", "富有远见"],
+                description: "ENTJ型的人是果断坚决的指挥官，善于领导和管理。他们富有远见，善于制定和执行战略计划，喜欢挑战和克服困难。他们通常非常自信，善于激励和领导他人。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ENTJ指挥官人格！果断坚决、善于领导、富有远见。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ENTJ #自我成长"
+            },
+            "ESFP": {
+                name: "表演者",
+                traits: ["热情活泼", "善于表达", "热爱生活"],
+                description: "ESFP型的人是热情活泼的表演者，善于表达和娱乐他人。他们热爱生活，喜欢与人交流和互动，善于创造轻松愉快的氛围。他们通常非常乐观，喜欢尝试新事物和体验。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ESFP表演家人格！热情活泼、善于表达、热爱生活。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ESFP #自我成长"
+            },
+            "ESTP": {
+                name: "企业家",
+                traits: ["大胆果断", "善于应变", "行动力强"],
+                description: "ESTP型的人是大胆果断的企业家，善于应变和行动。他们行动力强，喜欢挑战和冒险，善于在压力下做出决策。他们通常非常实际，善于解决具体问题和把握机会。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ESTP企业家人格！大胆果断、善于应变、行动力强。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ESTP #自我成长"
+            },
+            "ESFJ": {
+                name: "执政官",
+                traits: ["热情友善", "善于组织", "乐于助人"],
+                description: "ESFJ型的人是热情友善的执政官，善于组织和帮助他人。他们乐于助人，喜欢照顾他人的需求，善于组织和管理社交活动。他们通常非常重视传统和价值观，善于维护和谐的人际关系。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ESFJ执政官人格！热情友善、善于组织、乐于助人。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ESFJ #自我成长"
+            },
+            "ESTJ": {
+                name: "总经理",
+                traits: ["果断坚决", "善于管理", "注重效率"],
+                description: "ESTJ型的人是果断坚决的总经理，善于管理和组织。他们注重效率和结果，喜欢按照规则和程序办事，善于制定和执行计划。他们通常非常有责任感，善于领导和管理团队。",
+                image: "https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/2da5afa439c945d3aefce92ce72d003d~tplv-a9rns2rl98-image.image?rcl=2025111401441589BE87783B5CA49E0084&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1765647875&x-signature=go3YwDbSLiJmT07rovcg1ZILFG4%3D",
+                caption: "我是ESTJ总经理人格！果断坚决、善于管理、注重效率。你是什么类型？来MBTI深度解析套装测试一下吧！#MBTI #人格测试 #ESTJ #自我成长"
             }
         };
         
         // Test State
         let currentQuestionIndex = 0;
         const answers = {};
+        let currentMbtiType = 'INFP'; // Default type
+        let comparisonChart = null;
         
         // Functions
         function showScreen(screenId) {
@@ -1094,6 +1521,9 @@
             shareMbtiName.textContent = mbtiData.name;
             shareCaption.textContent = mbtiData.caption;
             
+            // Store current MBTI type for report screen
+            currentMbtiType = type;
+            
             // Show result screen
             showScreen('result-screen');
         }
@@ -1107,31 +1537,3388 @@
             successModal.classList.add('hidden');
         }
         
-        // Initialize Career Chart
-        function initCareerChart() {
-            const ctx = document.getElementById('career-chart').getContext('2d');
-            const careerChart = new Chart(ctx, {
-                type: 'radar',
+        // Update Report Content based on MBTI Type
+        function updateReportContent(type) {
+            const mbtiData = mbtiTypes[type] || mbtiTypes['INFP'];
+            const compatibilityInfo = compatibilityData[type] || compatibilityData['INFP'];
+            
+            // Update personality overview
+            const personalityOverview = document.querySelector('#report-screen .p-6.border-b.border-gray-100:nth-child(1) p');
+            personalityOverview.innerHTML = `
+                <p class="text-gray-600 mb-4">
+                    ${mbtiData.description}
+                </p>
+                <p class="text-gray-600">
+                    ${getPersonalityDetails(type)}
+                </p>
+            `;
+            
+            // Update career adaptation
+            const careerAdaptation = document.querySelector('#report-screen .p-6.border-b.border-gray-100:nth-child(2)');
+            const [suitableJobs, careerAdvice] = getCareerInfo(type);
+            
+            const careerContent = careerAdaptation.querySelector('.space-y-3');
+            careerContent.innerHTML = `
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <h3 class="font-medium text-blue-800">适合职业</h3>
+                    <p class="text-sm text-blue-700">${suitableJobs}</p>
+                </div>
+                <div class="p-3 bg-yellow-50 rounded-lg">
+                    <h3 class="font-medium text-yellow-800">职业发展建议</h3>
+                    <p class="text-sm text-yellow-700">${careerAdvice}</p>
+                </div>
+            `;
+            
+            // Update Cognitive Functions Analysis
+            const cognitiveFunctions = getCognitiveFunctions(type);
+            document.getElementById('cognitive-description').textContent = cognitiveFunctions.description;
+            document.getElementById('dominant-function').textContent = cognitiveFunctions.dominant;
+            document.getElementById('auxiliary-function').textContent = cognitiveFunctions.auxiliary;
+            document.getElementById('tertiary-function').textContent = cognitiveFunctions.tertiary;
+            document.getElementById('inferior-function').textContent = cognitiveFunctions.inferior;
+            
+            // Update cognitive strengths and blindspots
+            const cognitiveStrengths = document.getElementById('cognitive-strengths');
+            const cognitiveBlindspots = document.getElementById('cognitive-blindspots');
+            cognitiveStrengths.innerHTML = '';
+            cognitiveBlindspots.innerHTML = '';
+            
+            cognitiveFunctions.strengths.forEach(strength => {
+                const li = document.createElement('li');
+                li.textContent = strength;
+                cognitiveStrengths.appendChild(li);
+            });
+            
+            cognitiveFunctions.blindspots.forEach(blindspot => {
+                const li = document.createElement('li');
+                li.textContent = blindspot;
+                cognitiveBlindspots.appendChild(li);
+            });
+            
+            // Update Stress Response Patterns
+            const stressResponse = getStressResponse(type);
+            const stressSigns = document.getElementById('stress-signs');
+            const stressCauses = document.getElementById('stress-causes');
+            const stressStrategies = document.getElementById('stress-strategies');
+            stressSigns.innerHTML = '';
+            stressCauses.innerHTML = '';
+            stressStrategies.innerHTML = '';
+            
+            stressResponse.signs.forEach(sign => {
+                const li = document.createElement('li');
+                li.textContent = sign;
+                stressSigns.appendChild(li);
+            });
+            
+            stressResponse.causes.forEach(cause => {
+                const li = document.createElement('li');
+                li.textContent = cause;
+                stressCauses.appendChild(li);
+            });
+            
+            stressResponse.strategies.forEach(strategy => {
+                const li = document.createElement('li');
+                li.textContent = strategy;
+                stressStrategies.appendChild(li);
+            });
+            
+            // Update Famous People Examples
+            const famousPeople = getFamousPeople(type);
+            const famousPeopleContainer = document.getElementById('famous-people-container');
+            famousPeopleContainer.innerHTML = '';
+            
+            famousPeople.forEach(person => {
+                const personElement = document.createElement('div');
+                personElement.className = 'p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl';
+                personElement.innerHTML = `
+                    <h3 class="font-medium text-purple-800 mb-1">${person.name}</h3>
+                    <p class="text-xs text-gray-500 mb-2">${person.title}</p>
+                    <p class="text-sm text-gray-700">${person.description}</p>
+                `;
+                famousPeopleContainer.appendChild(personElement);
+            });
+            
+            // Update Development Stages
+            const developmentStages = getDevelopmentStages(type);
+            const developmentStagesContainer = document.getElementById('development-stages-container');
+            developmentStagesContainer.innerHTML = '';
+            
+            developmentStages.forEach((stage, index) => {
+                const stageElement = document.createElement('div');
+                stageElement.className = 'relative';
+                
+                // Create timeline dot
+                const dot = document.createElement('div');
+                dot.className = 'absolute left-0 md:left-1/2 w-4 h-4 bg-blue-500 rounded-full transform md:translate-x-0 translate-x-4 -translate-y-1/2 z-10';
+                
+                // Create timeline content
+                const content = document.createElement('div');
+                content.className = `ml-8 md:ml-0 md:w-1/2 md:${index % 2 === 0 ? 'pr-8' : 'pl-8'} md:text-right`;
+                content.innerHTML = `
+                    <h3 class="font-medium text-blue-800 mb-1">${stage.age} - ${stage.title}</h3>
+                    <p class="text-sm text-gray-700">${stage.description}</p>
+                `;
+                
+                // Append elements
+                stageElement.appendChild(dot);
+                stageElement.appendChild(content);
+                developmentStagesContainer.appendChild(stageElement);
+            });
+            
+            // Update Cultural Perspectives
+            const culturalPerspectives = getCulturalPerspectives(type);
+            const westernPerspective = document.getElementById('western-perspective');
+            const easternPerspective = document.getElementById('eastern-perspective');
+            westernPerspective.innerHTML = '';
+            easternPerspective.innerHTML = '';
+            
+            culturalPerspectives.western.forEach(perspective => {
+                const li = document.createElement('li');
+                li.textContent = perspective;
+                westernPerspective.appendChild(li);
+            });
+            
+            culturalPerspectives.eastern.forEach(perspective => {
+                const li = document.createElement('li');
+                li.textContent = perspective;
+                easternPerspective.appendChild(li);
+            });
+            
+            // Update Dynamic Changes
+            const dynamicChanges = getDynamicChanges(type);
+            const growthPath = document.getElementById('growth-path');
+            const typicalChanges = document.getElementById('typical-changes');
+            growthPath.innerHTML = '';
+            typicalChanges.innerHTML = '';
+            
+            dynamicChanges.growthPath.forEach(path => {
+                const li = document.createElement('li');
+                li.textContent = path;
+                growthPath.appendChild(li);
+            });
+            
+            dynamicChanges.typicalChanges.forEach(change => {
+                const li = document.createElement('li');
+                li.textContent = change;
+                typicalChanges.appendChild(li);
+            });
+            
+            // Update Learning Styles
+            const learningStyles = getLearningStyles(type);
+            const learningStrengths = document.getElementById('learning-strengths');
+            const learningChallenges = document.getElementById('learning-challenges');
+            const learningStrategies = document.getElementById('learning-strategies');
+            learningStrengths.innerHTML = '';
+            learningChallenges.innerHTML = '';
+            learningStrategies.innerHTML = '';
+            
+            learningStyles.strengths.forEach(strength => {
+                const li = document.createElement('li');
+                li.textContent = strength;
+                learningStrengths.appendChild(li);
+            });
+            
+            learningStyles.challenges.forEach(challenge => {
+                const li = document.createElement('li');
+                li.textContent = challenge;
+                learningChallenges.appendChild(li);
+            });
+            
+            learningStyles.strategies.forEach(strategy => {
+                const li = document.createElement('li');
+                li.textContent = strategy;
+                learningStrategies.appendChild(li);
+            });
+            
+            // Update Health Patterns
+            const healthPatterns = getHealthPatterns(type);
+            const physicalHealth = document.getElementById('physical-health');
+            const mentalHealth = document.getElementById('mental-health');
+            const healthStrategies = document.getElementById('health-strategies');
+            physicalHealth.innerHTML = '';
+            mentalHealth.innerHTML = '';
+            healthStrategies.innerHTML = '';
+            
+            healthPatterns.physical.forEach(issue => {
+                const li = document.createElement('li');
+                li.textContent = issue;
+                physicalHealth.appendChild(li);
+            });
+            
+            healthPatterns.mental.forEach(issue => {
+                const li = document.createElement('li');
+                li.textContent = issue;
+                mentalHealth.appendChild(li);
+            });
+            
+            healthPatterns.strategies.forEach(strategy => {
+                const li = document.createElement('li');
+                li.textContent = strategy;
+                healthStrategies.appendChild(li);
+            });
+            
+            // Update Hobbies
+            const hobbies = getHobbies(type);
+            const hobbiesContainer = document.getElementById('hobbies-container');
+            hobbiesContainer.innerHTML = '';
+            
+            hobbies.forEach(hobby => {
+                const hobbyElement = document.createElement('div');
+                hobbyElement.className = 'p-4 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl';
+                hobbyElement.innerHTML = `
+                    <h3 class="font-medium text-orange-800 mb-2">${hobby.category}</h3>
+                    <p class="text-sm text-gray-700">${hobby.examples.join('、')}</p>
+                `;
+                hobbiesContainer.appendChild(hobbyElement);
+            });
+            
+            // Update Communication Styles
+            const communicationStyles = getCommunicationStyles(type);
+            const communicationStrengths = document.getElementById('communication-strengths');
+            const communicationChallenges = document.getElementById('communication-challenges');
+            const communicationStrategies = document.getElementById('communication-strategies');
+            communicationStrengths.innerHTML = '';
+            communicationChallenges.innerHTML = '';
+            communicationStrategies.innerHTML = '';
+            
+            communicationStyles.strengths.forEach(strength => {
+                const li = document.createElement('li');
+                li.textContent = strength;
+                communicationStrengths.appendChild(li);
+            });
+            
+            communicationStyles.challenges.forEach(challenge => {
+                const li = document.createElement('li');
+                li.textContent = challenge;
+                communicationChallenges.appendChild(li);
+            });
+            
+            communicationStyles.strategies.forEach(strategy => {
+                const li = document.createElement('li');
+                li.textContent = strategy;
+                communicationStrategies.appendChild(li);
+            });
+            
+            // Update growth suggestions
+            const growthSuggestions = document.querySelector('#report-screen .p-6:last-child .space-y-3');
+            const growthTips = getGrowthTips(type);
+            
+            let growthContent = '';
+            growthTips.forEach((tip, index) => {
+                growthContent += `
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mt-0.5">
+                            <span class="text-xs font-medium">${index + 1}</span>
+                        </div>
+                        <p class="ml-3 text-sm text-gray-700">${tip}</p>
+                    </div>
+                `;
+            });
+            
+            growthSuggestions.innerHTML = growthContent;
+            
+            // Update Compatibility Analysis
+            const bestMatchesContainer = document.getElementById('best-matches');
+            const compatibilityAnalysisContainer = document.getElementById('compatibility-analysis');
+            
+            // Clear previous content
+            bestMatchesContainer.innerHTML = '';
+            
+            // Populate best matches
+            compatibilityInfo.bestMatches.forEach((matchType, index) => {
+                const matchData = mbtiTypes[matchType];
+                const score = compatibilityInfo.compatibilityScores[matchType];
+                
+                const matchElement = document.createElement('div');
+                matchElement.className = 'p-3 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg flex items-center justify-between';
+                matchElement.innerHTML = `
+                    <div>
+                        <span class="font-medium">${matchType}</span>
+                        <span class="text-xs text-gray-500 ml-2">${matchData.name}</span>
+                    </div>
+                    <span class="text-sm font-medium text-purple-800">${score}%</span>
+                `;
+                
+                bestMatchesContainer.appendChild(matchElement);
+            });
+            
+            // Update compatibility analysis text
+            compatibilityAnalysisContainer.querySelector('p').textContent = compatibilityInfo.analysis;
+            
+            // Initialize compatibility chart
+            initCompatibilityChart(type);
+            
+            // Initialize type comparison chart with default selection
+            const compareTypeSelect = document.getElementById('compare-type');
+            initComparisonChart(type, compareTypeSelect.value);
+            
+            // Update type comparison analysis
+            updateTypeComparison(type, compareTypeSelect.value);
+        }
+        
+        // Get detailed personality information based on MBTI type
+        function getPersonalityDetails(type) {
+            const details = {
+                "INFP": "INFPs通常具有强烈的个人价值观和理想，并致力于实现这些理想。他们对新想法和可能性持开放态度，善于看到事物的潜力。他们通常是安静、内省的，但在与亲密朋友和家人相处时会非常热情和开放。",
+                "INTJ": "INTJs是战略思想家，善于分析复杂问题并提出创新解决方案。他们具有强大的逻辑思维能力和远见卓识，善于制定和执行长期计划。他们通常非常自信和独立，重视知识和能力的提升。",
+                "INFJ": "INFJs具有深刻的洞察力和同理心，善于理解他人的情感和动机。他们具有强烈的理想主义和使命感，致力于实现自己的价值观和目标。他们通常非常有创造力，善于发现事物的深层意义。",
+                "INTP": "INTPs是理性的思考者，具有强烈的好奇心和分析能力。他们善于思考复杂的问题，追求知识和理解。他们通常非常独立，重视智力上的自由和自主，喜欢探索抽象概念和理论。",
+                "ISFP": "ISFPs是温和友善的艺术家，善于表达自己的创造力和美感。他们注重当下的体验，热爱生活中的美好事物。他们通常非常实际，善于处理具体问题，喜欢通过行动来表达自己。",
+                "ISTP": "ISTPs是冷静客观的手艺人，善于解决实际问题。他们动手能力强，喜欢探索事物的工作原理，善于分析和解决复杂的机械或技术问题。他们通常非常独立，喜欢自己动手解决问题。",
+                "ISFJ": "ISFJs是忠诚可靠的守护者，善于照顾他人。他们富有同情心，注重细节，喜欢帮助他人解决实际问题。他们通常非常有责任感，善于组织和管理日常事务，重视传统和稳定。",
+                "ISTJ": "ISTJs是严谨可靠的检查员，善于组织和管理。他们注重事实和细节，喜欢按照规则和程序办事，善于制定和执行计划。他们通常非常有责任感，善于处理复杂的组织任务，重视传统和秩序。",
+                "ENFP": "ENFPs是热情洋溢的活动家，善于激发他人的潜力。他们富有创造力，善于沟通，喜欢探索新的想法和可能性。他们通常非常乐观，善于激励和鼓舞他人，喜欢与人交流和合作。",
+                "ENTP": "ENTPs是聪明机智的辩论家，善于思考和辩论。他们好奇心强，喜欢挑战传统观念，善于发现问题并提出创新解决方案。他们通常非常善于言辞，喜欢与人交流和辩论，思维敏捷。",
+                "ENFJ": "ENFJs是富有魅力的教育家，善于启发和引导他人。他们善于沟通，乐于助人，喜欢帮助他人发现自己的潜力。他们通常非常有同情心，善于理解他人的情感和需求，具有强烈的责任感。",
+                "ENTJ": "ENTJs是果断坚决的指挥官，善于领导和管理。他们富有远见，善于制定和执行战略计划，喜欢挑战和克服困难。他们通常非常自信，善于激励和领导他人，注重效率和结果。",
+                "ESFP": "ESFPs是热情活泼的表演者，善于表达和娱乐他人。他们热爱生活，喜欢与人交流和互动，善于创造轻松愉快的氛围。他们通常非常乐观，喜欢尝试新事物和体验，善于即兴发挥。",
+                "ESTP": "ESTPs是大胆果断的企业家，善于应变和行动。他们行动力强，喜欢挑战和冒险，善于在压力下做出决策。他们通常非常实际，善于解决具体问题和把握机会，喜欢体验刺激和变化。",
+                "ESFJ": "ESFJs是热情友善的执政官，善于组织和帮助他人。他们乐于助人，喜欢照顾他人的需求，善于组织和管理社交活动。他们通常非常重视传统和价值观，善于维护和谐的人际关系。",
+                "ESTJ": "ESTJs是果断坚决的总经理，善于管理和组织。他们注重效率和结果，喜欢按照规则和程序办事，善于制定和执行计划。他们通常非常有责任感，善于领导和管理团队，重视秩序和稳定。"
+            };
+            
+            return details[type] || details['INFP'];
+        }
+        
+        // Get cognitive functions information based on MBTI type
+        function getCognitiveFunctions(type) {
+            const functions = {
+                "INFP": {
+                    dominant: "内向情感 (Fi)",
+                    auxiliary: "外向直觉 (Ne)",
+                    tertiary: "内向感觉 (Si)",
+                    inferior: "外向思考 (Te)",
+                    description: "INFP的认知功能栈以Fi为核心，这是一种深刻的内在价值观系统。他们通过Fi来判断事物的价值和意义，通过Ne来探索可能性和联系，通过Si来回顾过去的经验，最后通过Te来组织和执行。",
+                    strengths: [
+                        "强烈的个人价值观和理想",
+                        "深刻的同理心和理解力",
+                        "丰富的想象力和创造力",
+                        "对美好事物的敏锐感知"
+                    ],
+                    blindspots: [
+                        "可能过度理想化，脱离现实",
+                        "在压力下可能变得固执或批判",
+                        "可能忽视实际细节和具体步骤",
+                        "不善于处理冲突和批评"
+                    ]
+                },
+                "INTJ": {
+                    dominant: "内向直觉 (Ni)",
+                    auxiliary: "外向思考 (Te)",
+                    tertiary: "内向情感 (Fi)",
+                    inferior: "外向感觉 (Se)",
+                    description: "INTJ的认知功能栈以Ni为核心，这是一种专注于未来可能性和模式识别的功能。他们通过Ni来洞察深层含义和长远趋势，通过Te来组织和执行计划，通过Fi来维护个人价值观，最后通过Se来关注当下的现实。",
+                    strengths: [
+                        "强大的战略思维和长远规划能力",
+                        "深刻的洞察力和模式识别能力",
+                        "高效的组织和执行能力",
+                        "坚定的信念和独立思考"
+                    ],
+                    blindspots: [
+                        "可能忽视当下的细节和现实",
+                        "在压力下可能变得过度控制或固执",
+                        "可能低估情感因素的重要性",
+                        "不善于即兴应对突发情况"
+                    ]
+                },
+                "INFJ": {
+                    dominant: "内向直觉 (Ni)",
+                    auxiliary: "外向情感 (Fe)",
+                    tertiary: "内向思考 (Ti)",
+                    inferior: "外向感觉 (Se)",
+                    description: "INFJ的认知功能栈以Ni为核心，这是一种专注于未来可能性和深层含义的功能。他们通过Ni来洞察他人和情境，通过Fe来建立和谐的人际关系，通过Ti来分析和理解复杂系统，最后通过Se来关注当下的体验。",
+                    strengths: [
+                        "深刻的洞察力和同理心",
+                        "强烈的理想主义和使命感",
+                        "善于理解他人的情感和动机",
+                        "富有创造力和远见"
+                    ],
+                    blindspots: [
+                        "可能过度关注他人需求而忽视自身",
+                        "在压力下可能变得过度批判或固执",
+                        "可能忽视实际细节和具体步骤",
+                        "不善于处理冲突和批评"
+                    ]
+                },
+                "INTP": {
+                    dominant: "内向思考 (Ti)",
+                    auxiliary: "外向直觉 (Ne)",
+                    tertiary: "内向感觉 (Si)",
+                    inferior: "外向情感 (Fe)",
+                    description: "INTP的认知功能栈以Ti为核心，这是一种专注于逻辑分析和系统理解的功能。他们通过Ti来构建内在的逻辑框架，通过Ne来探索新的想法和可能性，通过Si来回顾过去的经验，最后通过Fe来理解和适应他人的情感。",
+                    strengths: [
+                        "强大的逻辑思维和分析能力",
+                        "深刻的好奇心和求知欲",
+                        "善于理解复杂系统和理论",
+                        "独立思考和创新能力"
+                    ],
+                    blindspots: [
+                        "可能过度分析而缺乏行动",
+                        "在压力下可能变得冷漠或固执",
+                        "可能忽视情感因素和人际关系",
+                        "不善于表达自己的想法和感受"
+                    ]
+                },
+                "ISFP": {
+                    dominant: "内向情感 (Fi)",
+                    auxiliary: "外向感觉 (Se)",
+                    tertiary: "内向直觉 (Ni)",
+                    inferior: "外向思考 (Te)",
+                    description: "ISFP的认知功能栈以Fi为核心，这是一种专注于个人价值观和情感体验的功能。他们通过Fi来判断事物的价值和意义，通过Se来体验当下的感官世界，通过Ni来洞察深层含义，最后通过Te来组织和执行。",
+                    strengths: [
+                        "强烈的审美感和艺术天赋",
+                        "善于体验和表达情感",
+                        "注重当下的体验和感受",
+                        "灵活适应和实际解决问题的能力"
+                    ],
+                    blindspots: [
+                        "可能过度关注个人感受而忽视他人",
+                        "在压力下可能变得固执或逃避",
+                        "可能忽视长远规划和理论思考",
+                        "不善于处理抽象概念和复杂系统"
+                    ]
+                },
+                "ISTP": {
+                    dominant: "内向思考 (Ti)",
+                    auxiliary: "外向感觉 (Se)",
+                    tertiary: "内向直觉 (Ni)",
+                    inferior: "外向情感 (Fe)",
+                    description: "ISTP的认知功能栈以Ti为核心，这是一种专注于逻辑分析和实际问题解决的功能。他们通过Ti来理解事物的工作原理，通过Se来体验当下的感官世界，通过Ni来洞察深层模式，最后通过Fe来理解和适应他人的情感。",
+                    strengths: [
+                        "强大的动手能力和技术天赋",
+                        "善于分析和解决实际问题",
+                        "冷静客观的思考方式",
+                        "灵活适应和即兴应对的能力"
+                    ],
+                    blindspots: [
+                        "可能过度关注技术细节而忽视大局",
+                        "在压力下可能变得冷漠或冲动",
+                        "可能忽视情感因素和人际关系",
+                        "不善于表达自己的想法和感受"
+                    ]
+                },
+                "ISFJ": {
+                    dominant: "内向感觉 (Si)",
+                    auxiliary: "外向情感 (Fe)",
+                    tertiary: "内向思考 (Ti)",
+                    inferior: "外向直觉 (Ne)",
+                    description: "ISFJ的认知功能栈以Si为核心，这是一种专注于经验和传统的功能。他们通过Si来存储和回忆详细信息，通过Fe来建立和谐的人际关系，通过Ti来分析和理解系统，最后通过Ne来探索新的可能性。",
+                    strengths: [
+                        "强烈的责任感和可靠性",
+                        "善于照顾他人的需求",
+                        "注重细节和传统",
+                        "耐心细致的工作态度"
+                    ],
+                    blindspots: [
+                        "可能过度依赖传统而抗拒变革",
+                        "在压力下可能变得过度控制或焦虑",
+                        "可能忽视创新和新的可能性",
+                        "不善于处理抽象概念和复杂理论"
+                    ]
+                },
+                "ISTJ": {
+                    dominant: "内向感觉 (Si)",
+                    auxiliary: "外向思考 (Te)",
+                    tertiary: "内向情感 (Fi)",
+                    inferior: "外向直觉 (Ne)",
+                    description: "ISTJ的认知功能栈以Si为核心，这是一种专注于经验和事实的功能。他们通过Si来存储和回忆详细信息，通过Te来组织和执行计划，通过Fi来维护个人价值观，最后通过Ne来探索新的可能性。",
+                    strengths: [
+                        "强烈的责任感和可靠性",
+                        "善于组织和管理复杂任务",
+                        "注重事实和细节",
+                        "严谨的工作态度和执行力"
+                    ],
+                    blindspots: [
+                        "可能过度依赖传统而抗拒变革",
+                        "在压力下可能变得过度控制或固执",
+                        "可能忽视创新和新的可能性",
+                        "不善于处理抽象概念和复杂理论"
+                    ]
+                },
+                "ENFP": {
+                    dominant: "外向直觉 (Ne)",
+                    auxiliary: "内向情感 (Fi)",
+                    tertiary: "外向思考 (Te)",
+                    inferior: "内向感觉 (Si)",
+                    description: "ENFP的认知功能栈以Ne为核心，这是一种专注于探索新想法和可能性的功能。他们通过Ne来发现新的联系和机会，通过Fi来判断事物的价值和意义，通过Te来组织和执行计划，最后通过Si来回顾过去的经验。",
+                    strengths: [
+                        "强烈的创造力和想象力",
+                        "善于激发他人的潜力和热情",
+                        "灵活适应和即兴应对的能力",
+                        "乐观积极的人生态度"
+                    ],
+                    blindspots: [
+                        "可能过度分散精力而缺乏专注",
+                        "在压力下可能变得冲动或焦虑",
+                        "可能忽视实际细节和具体步骤",
+                        "不善于长期坚持和执行计划"
+                    ]
+                },
+                "ENTP": {
+                    dominant: "外向直觉 (Ne)",
+                    auxiliary: "内向思考 (Ti)",
+                    tertiary: "外向情感 (Fe)",
+                    inferior: "内向感觉 (Si)",
+                    description: "ENTP的认知功能栈以Ne为核心，这是一种专注于探索新想法和可能性的功能。他们通过Ne来发现新的联系和机会，通过Ti来分析和理解系统，通过Fe来理解和适应他人的情感，最后通过Si来回顾过去的经验。",
+                    strengths: [
+                        "强烈的创造力和创新能力",
+                        "善于辩论和挑战传统观念",
+                        "灵活适应和即兴应对的能力",
+                        "敏锐的逻辑思维和分析能力"
+                    ],
+                    blindspots: [
+                        "可能过度分散精力而缺乏专注",
+                        "在压力下可能变得过度批判或固执",
+                        "可能忽视实际细节和具体步骤",
+                        "不善于长期坚持和执行计划"
+                    ]
+                },
+                "ENFJ": {
+                    dominant: "外向情感 (Fe)",
+                    auxiliary: "内向直觉 (Ni)",
+                    tertiary: "外向感觉 (Se)",
+                    inferior: "内向思考 (Ti)",
+                    description: "ENFJ的认知功能栈以Fe为核心，这是一种专注于建立和谐人际关系的功能。他们通过Fe来理解和适应他人的情感，通过Ni来洞察深层含义和长远趋势，通过Se来体验当下的感官世界，最后通过Ti来分析和理解系统。",
+                    strengths: [
+                        "强烈的领导力和影响力",
+                        "善于理解和激励他人",
+                        "注重和谐的人际关系",
+                        "富有远见和理想主义"
+                    ],
+                    blindspots: [
+                        "可能过度关注他人需求而忽视自身",
+                        "在压力下可能变得过度控制或焦虑",
+                        "可能忽视逻辑分析和客观事实",
+                        "不善于处理冲突和批评"
+                    ]
+                },
+                "ENTJ": {
+                    dominant: "外向思考 (Te)",
+                    auxiliary: "内向直觉 (Ni)",
+                    tertiary: "外向感觉 (Se)",
+                    inferior: "内向情感 (Fi)",
+                    description: "ENTJ的认知功能栈以Te为核心，这是一种专注于组织和执行的功能。他们通过Te来组织和管理资源，通过Ni来洞察深层含义和长远趋势，通过Se来体验当下的感官世界，最后通过Fi来维护个人价值观。",
+                    strengths: [
+                        "强烈的领导力和决策能力",
+                        "善于组织和管理复杂任务",
+                        "高效的执行力和结果导向",
+                        "富有远见和战略思维"
+                    ],
+                    blindspots: [
+                        "可能过度控制和支配他人",
+                        "在压力下可能变得过度批判或固执",
+                        "可能忽视情感因素和人际关系",
+                        "不善于表达自己的情感和脆弱"
+                    ]
+                },
+                "ESFP": {
+                    dominant: "外向感觉 (Se)",
+                    auxiliary: "内向情感 (Fi)",
+                    tertiary: "外向思考 (Te)",
+                    inferior: "内向直觉 (Ni)",
+                    description: "ESFP的认知功能栈以Se为核心，这是一种专注于当下感官体验的功能。他们通过Se来体验和享受当下的世界，通过Fi来判断事物的价值和意义，通过Te来组织和执行计划，最后通过Ni来洞察深层含义。",
+                    strengths: [
+                        "强烈的活力和热情",
+                        "善于表达和娱乐他人",
+                        "灵活适应和即兴应对的能力",
+                        "注重当下的体验和享受"
+                    ],
+                    blindspots: [
+                        "可能过度关注当下而忽视长远",
+                        "在压力下可能变得冲动或逃避",
+                        "可能忽视理论思考和抽象概念",
+                        "不善于长期规划和执行计划"
+                    ]
+                },
+                "ESTP": {
+                    dominant: "外向感觉 (Se)",
+                    auxiliary: "内向思考 (Ti)",
+                    tertiary: "外向情感 (Fe)",
+                    inferior: "内向直觉 (Ni)",
+                    description: "ESTP的认知功能栈以Se为核心，这是一种专注于当下感官体验的功能。他们通过Se来体验和享受当下的世界，通过Ti来分析和理解系统，通过Fe来理解和适应他人的情感，最后通过Ni来洞察深层含义。",
+                    strengths: [
+                        "强烈的行动力和应变能力",
+                        "善于解决实际问题和把握机会",
+                        "灵活适应和即兴应对的能力",
+                        "务实的思考方式和执行力"
+                    ],
+                    blindspots: [
+                        "可能过度关注当下而忽视长远",
+                        "在压力下可能变得冲动或冷漠",
+                        "可能忽视理论思考和抽象概念",
+                        "不善于长期规划和执行计划"
+                    ]
+                },
+                "ESFJ": {
+                    dominant: "外向情感 (Fe)",
+                    auxiliary: "内向感觉 (Si)",
+                    tertiary: "外向思考 (Te)",
+                    inferior: "内向直觉 (Ni)",
+                    description: "ESFJ的认知功能栈以Fe为核心，这是一种专注于建立和谐人际关系的功能。他们通过Fe来理解和适应他人的情感，通过Si来存储和回忆详细信息，通过Te来组织和执行计划，最后通过Ni来洞察深层含义。",
+                    strengths: [
+                        "强烈的责任感和服务意识",
+                        "善于理解和照顾他人需求",
+                        "注重和谐的人际关系",
+                        "细致周到的工作态度"
+                    ],
+                    blindspots: [
+                        "可能过度关注他人需求而忽视自身",
+                        "在压力下可能变得过度控制或焦虑",
+                        "可能忽视创新和新的可能性",
+                        "不善于处理抽象概念和复杂理论"
+                    ]
+                },
+                "ESTJ": {
+                    dominant: "外向思考 (Te)",
+                    auxiliary: "内向感觉 (Si)",
+                    tertiary: "外向情感 (Fe)",
+                    inferior: "内向直觉 (Ni)",
+                    description: "ESTJ的认知功能栈以Te为核心，这是一种专注于组织和执行的功能。他们通过Te来组织和管理资源，通过Si来存储和回忆详细信息，通过Fe来理解和适应他人的情感，最后通过Ni来洞察深层含义。",
+                    strengths: [
+                        "强烈的领导力和组织能力",
+                        "善于管理和执行复杂任务",
+                        "高效的执行力和结果导向",
+                        "注重传统和秩序"
+                    ],
+                    blindspots: [
+                        "可能过度控制和支配他人",
+                        "在压力下可能变得过度批判或固执",
+                        "可能忽视创新和新的可能性",
+                        "不善于处理抽象概念和复杂理论"
+                    ]
+                }
+            };
+            
+            return functions[type] || functions['INFP'];
+        }
+        
+        // Get stress response patterns based on MBTI type
+        function getStressResponse(type) {
+            const stress = {
+                "INFP": {
+                    signs: [
+                        "变得沉默寡言，避免社交",
+                        "过度内省和自我批判",
+                        "情绪波动大，容易哭泣",
+                        "对日常活动失去兴趣"
+                    ],
+                    causes: [
+                        "价值观受到挑战或否定",
+                        "被误解或不被欣赏",
+                        "长期处于冲突或压力环境",
+                        "被迫做违背内心的事情"
+                    ],
+                    strategies: [
+                        "给自己独处的时间，进行自我反思",
+                        "通过艺术、写作等创造性活动表达情感",
+                        "寻找支持性的社交环境，与理解你的人交流",
+                        "重新连接自己的核心价值观和理想"
+                    ]
+                },
+                "INTJ": {
+                    signs: [
+                        "变得过度批判和挑剔",
+                        "固执己见，不愿听取他人意见",
+                        "忽视身体和情感需求",
+                        "过度关注细节，失去大局观"
+                    ],
+                    causes: [
+                        "计划被打乱或无法控制局面",
+                        "能力受到质疑或挑战",
+                        "长期处于低效或混乱的环境",
+                        "被迫遵循不合理的规则或流程"
+                    ],
+                    strategies: [
+                        "暂时脱离压力源，进行战略性撤退",
+                        "通过身体活动释放压力",
+                        "重新评估目标和优先级",
+                        "寻找新的挑战或智力刺激"
+                    ]
+                },
+                "INFJ": {
+                    signs: [
+                        "变得过度敏感和情绪化",
+                        "避免冲突，过度妥协",
+                        "身体出现不明原因的不适",
+                        "对未来感到悲观或绝望"
+                    ],
+                    causes: [
+                        "人际关系冲突或背叛",
+                        "理想与现实差距过大",
+                        "长期处于情感消耗状态",
+                        "无法实现自己的使命或价值观"
+                    ],
+                    strategies: [
+                        "给自己创造一个安全的空间，进行自我关怀",
+                        "通过写作、冥想等方式整理思绪",
+                        "与信任的朋友或导师深入交流",
+                        "重新连接自己的核心价值观和使命感"
+                    ]
+                },
+                "INTP": {
+                    signs: [
+                        "变得更加内向和孤僻",
+                        "过度分析和犹豫不决",
+                        "对他人的情感需求反应迟钝",
+                        "沉迷于无意义的细节或理论"
+                    ],
+                    causes: [
+                        "逻辑被打断或无法理解复杂系统",
+                        "被迫遵循不合理的规则或流程",
+                        "长期处于社交压力环境",
+                        "无法满足自己的好奇心或智力需求"
+                    ],
+                    strategies: [
+                        "给自己独处的时间，进行深度思考",
+                        "沉浸在自己感兴趣的理论或项目中",
+                        "通过身体活动或动手项目平衡思维",
+                        "寻找智力相当的人进行有意义的交流"
+                    ]
+                },
+                "ISFP": {
+                    signs: [
+                        "变得更加内向和沉默",
+                        "过度关注细节，忽视大局",
+                        "情绪波动大，容易受到伤害",
+                        "通过物质或感官体验逃避现实"
+                    ],
+                    causes: [
+                        "价值观受到挑战或否定",
+                        "被迫做违背内心的事情",
+                        "长期处于冲突或压力环境",
+                        "无法表达自己的创造力或美感"
+                    ],
+                    strategies: [
+                        "给自己创造一个安静、舒适的环境",
+                        "通过艺术、音乐等创造性活动表达情感",
+                        "进行身体活动，如散步、瑜伽等",
+                        "与理解你的人分享感受和经历"
+                    ]
+                },
+                "ISTP": {
+                    signs: [
+                        "变得更加冷漠和疏离",
+                        "过度关注技术细节，忽视人际关系",
+                        "冲动行事，不计后果",
+                        "通过冒险或刺激活动逃避现实"
+                    ],
+                    causes: [
+                        "被控制或限制自由",
+                        "无法解决复杂的实际问题",
+                        "长期处于情绪化或不可预测的环境",
+                        "被迫遵循不合理的规则或流程"
+                    ],
+                    strategies: [
+                        "给自己独处的时间，进行冷静思考",
+                        "通过动手项目或技术挑战转移注意力",
+                        "进行身体活动，如运动、户外活动等",
+                        "寻找能够理解你的独立性的社交环境"
+                    ]
+                },
+                "ISFJ": {
+                    signs: [
+                        "变得过度焦虑和担忧",
+                        "过度承担责任，忽视自身需求",
+                        "对他人的批评过度敏感",
+                        "固执己见，不愿改变"
+                    ],
+                    causes: [
+                        "无法满足他人的期望",
+                        "价值观受到挑战或否定",
+                        "长期处于混乱或不可预测的环境",
+                        "人际关系出现问题或冲突"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "通过整理环境或完成小任务获得掌控感",
+                        "与信任的朋友或家人分享感受",
+                        "进行放松活动，如冥想、深呼吸等"
+                    ]
+                },
+                "ISTJ": {
+                    signs: [
+                        "变得更加固执和僵化",
+                        "过度关注规则和细节，忽视大局",
+                        "对他人的错误过度批评",
+                        "身体出现压力相关的症状"
+                    ],
+                    causes: [
+                        "规则被打破或无法预测的变化",
+                        "无法完成任务或达到标准",
+                        "长期处于混乱或低效的环境",
+                        "被迫违背自己的原则或价值观"
+                    ],
+                    strategies: [
+                        "重新评估自己的优先级和目标",
+                        "通过整理环境或完成小任务获得掌控感",
+                        "进行身体活动，如散步、跑步等",
+                        "学习接受变化和不确定性"
+                    ]
+                },
+                "ENFP": {
+                    signs: [
+                        "变得过度活跃和冲动",
+                        "注意力分散，无法集中",
+                        "情绪波动大，容易激动或沮丧",
+                        "过度承诺，无法兑现"
+                    ],
+                    causes: [
+                        "被困在单调或限制性的环境",
+                        "无法实现自己的理想或价值观",
+                        "长期处于缺乏刺激或创新的环境",
+                        "人际关系出现问题或冲突"
+                    ],
+                    strategies: [
+                        "寻找新的挑战或创造性的 outlet",
+                        "通过身体活动释放过剩的能量",
+                        "与支持性的朋友或家人交流",
+                        "学习专注和完成已开始的项目"
+                    ]
+                },
+                "ENTP": {
+                    signs: [
+                        "变得过度辩论和挑衅",
+                        "忽视他人的感受和需求",
+                        "注意力分散，无法集中",
+                        "过度自信，低估风险"
+                    ],
+                    causes: [
+                        "被困在单调或限制性的环境",
+                        "无法挑战或质疑现有的想法",
+                        "长期处于缺乏智力刺激的环境",
+                        "无法表达自己的创造力或创新想法"
+                    ],
+                    strategies: [
+                        "寻找新的智力挑战或辩论机会",
+                        "通过身体活动释放过剩的能量",
+                        "学习倾听他人的意见和感受",
+                        "专注于解决实际问题，而不仅仅是理论"
+                    ]
+                },
+                "ENFJ": {
+                    signs: [
+                        "变得过度控制和支配",
+                        "忽视自己的需求，过度关注他人",
+                        "对批评过度敏感",
+                        "情绪波动大，容易感到失望"
+                    ],
+                    causes: [
+                        "无法帮助或支持他人",
+                        "价值观受到挑战或否定",
+                        "长期处于冲突或不和谐的环境",
+                        "无法实现自己的理想或使命感"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "与信任的朋友或家人分享感受",
+                        "通过创造性活动表达自己",
+                        "重新连接自己的核心价值观和使命感"
+                    ]
+                },
+                "ENTJ": {
+                    signs: [
+                        "变得过度控制和支配",
+                        "对他人的错误过度批评",
+                        "忽视身体和情感需求",
+                        "过度自信，低估风险"
+                    ],
+                    causes: [
+                        "无法控制局面或实现目标",
+                        "能力受到质疑或挑战",
+                        "长期处于低效或混乱的环境",
+                        "被迫遵循不合理的规则或流程"
+                    ],
+                    strategies: [
+                        "暂时脱离压力源，进行战略性撤退",
+                        "通过身体活动释放压力",
+                        "重新评估目标和优先级",
+                        "学习授权和信任他人"
+                    ]
+                },
+                "ESFP": {
+                    signs: [
+                        "变得过度活跃和冲动",
+                        "通过物质或感官体验逃避现实",
+                        "对批评过度敏感",
+                        "情绪波动大，容易激动或沮丧"
+                    ],
+                    causes: [
+                        "被困在单调或限制性的环境",
+                        "无法表达自己的创造力或活力",
+                        "长期处于缺乏刺激或乐趣的环境",
+                        "人际关系出现问题或冲突"
+                    ],
+                    strategies: [
+                        "寻找新的体验或创造性的 outlet",
+                        "通过身体活动释放过剩的能量",
+                        "与支持性的朋友或家人交流",
+                        "学习面对和处理负面情绪"
+                    ]
+                },
+                "ESTP": {
+                    signs: [
+                        "变得更加冲动和冒险",
+                        "忽视他人的感受和需求",
+                        "对规则和限制过度反抗",
+                        "通过刺激或危险活动逃避现实"
+                    ],
+                    causes: [
+                        "被困在单调或限制性的环境",
+                        "无法解决实际问题或挑战",
+                        "长期处于缺乏刺激或行动的环境",
+                        "被迫遵循不合理的规则或流程"
+                    ],
+                    strategies: [
+                        "寻找新的挑战或实际问题解决",
+                        "通过身体活动释放过剩的能量",
+                        "学习考虑他人的感受和需求",
+                        "专注于长期目标，而不仅仅是当下"
+                    ]
+                },
+                "ESFJ": {
+                    signs: [
+                        "变得过度焦虑和担忧",
+                        "过度承担责任，忽视自身需求",
+                        "对他人的批评过度敏感",
+                        "固执己见，不愿改变"
+                    ],
+                    causes: [
+                        "无法满足他人的期望",
+                        "人际关系出现问题或冲突",
+                        "长期处于不和谐或不被欣赏的环境",
+                        "被迫违背自己的价值观或原则"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "与信任的朋友或家人分享感受",
+                        "通过整理环境或完成小任务获得掌控感",
+                        "进行放松活动，如冥想、深呼吸等"
+                    ]
+                },
+                "ESTJ": {
+                    signs: [
+                        "变得更加固执和僵化",
+                        "对他人的错误过度批评",
+                        "过度控制和支配他人",
+                        "身体出现压力相关的症状"
+                    ],
+                    causes: [
+                        "规则被打破或无法预测的变化",
+                        "无法实现目标或达到标准",
+                        "长期处于混乱或低效的环境",
+                        "被迫违背自己的原则或价值观"
+                    ],
+                    strategies: [
+                        "重新评估自己的优先级和目标",
+                        "通过整理环境或完成小任务获得掌控感",
+                        "进行身体活动，如散步、跑步等",
+                        "学习接受变化和不确定性"
+                    ]
+                }
+            };
+            
+            return stress[type] || stress['INFP'];
+        }
+        
+        // Get famous people examples based on MBTI type
+        function getFamousPeople(type) {
+            const people = {
+                "INFP": [
+                    { name: "陶渊明", title: "中国古代诗人", description: "不为五斗米折腰，追求精神自由和理想生活的代表人物。" },
+                    { name: "梵高", title: "荷兰画家", description: "后印象派画家，作品充满情感和生命力，代表作品《星夜》。" },
+                    { name: "林黛玉", title: "《红楼梦》人物", description: "敏感、细腻、富有才情，追求精神共鸣和真挚情感。" }
+                ],
+                "INTJ": [
+                    { name: "秦始皇", title: "中国古代皇帝", description: "统一中国，建立中央集权制度，推行标准化的战略思想家。" },
+                    { name: "诸葛亮", title: "三国时期政治家", description: "蜀汉丞相，善于战略规划和治国理政，发明木牛流马等工具。" },
+                    { name: "马斯克", title: "企业家、发明家", description: "特斯拉、SpaceX等公司创始人，致力于人类多星球生存和可持续能源。" }
+                ],
+                "INFJ": [
+                    { name: "王阳明", title: "明代哲学家", description: "心学集大成者，提出'知行合一'，善于洞察人心和事物本质。" },
+                    { name: "甘地", title: "印度独立运动领袖", description: "非暴力抵抗运动的倡导者，致力于社会正义和人类平等。" },
+                    { name: "特蕾莎修女", title: "天主教修女", description: "诺贝尔和平奖获得者，致力于帮助贫困和患病者。" }
+                ],
+                "INTP": [
+                    { name: "爱因斯坦", title: "物理学家", description: "提出相对论，改变人类对宇宙的认识，善于抽象思维和理论构建。" },
+                    { name: "牛顿", title: "物理学家、数学家", description: "发现万有引力定律，建立经典力学体系，善于逻辑分析和系统思考。" },
+                    { name: "苏格拉底", title: "古希腊哲学家", description: "西方哲学之父，善于提问和逻辑推理，追求真理和智慧。" }
+                ],
+                "ISFP": [
+                    { name: "李白", title: "唐代诗人", description: "浪漫主义诗人，作品充满想象力和感官体验，代表作品《将进酒》。" },
+                    { name: "莫奈", title: "法国画家", description: "印象派创始人之一，善于捕捉光影和色彩的变化，代表作品《睡莲》。" },
+                    { name: "王菲", title: "中国歌手", description: "独特的音乐风格和个人魅力，注重当下的情感表达和艺术体验。" }
+                ],
+                "ISTP": [
+                    { name: "张衡", title: "东汉科学家", description: "发明地动仪，在天文学、数学等领域有重要贡献，善于动手和解决实际问题。" },
+                    { name: "爱迪生", title: "发明家", description: "发明电灯、留声机等，拥有众多专利，善于实验和解决实际问题。" },
+                    { name: "史蒂夫·乔布斯", title: "企业家、发明家", description: "苹果公司创始人，注重产品设计和用户体验，善于将技术和艺术结合。" }
+                ],
+                "ISFJ": [
+                    { name: "孝庄文皇后", title: "清朝皇后", description: "辅佐顺治、康熙两代皇帝，善于幕后协调和细节关怀，维护清朝统治。" },
+                    { name: "南丁格尔", title: "护士", description: "现代护理创始人，致力于改善医疗条件和护理质量，注重细节和关怀。" },
+                    { name: "宋庆龄", title: "政治家", description: "孙中山夫人，致力于中国人民的解放事业，注重实际的帮助和支持。" }
+                ],
+                "ISTJ": [
+                    { name: "诸葛亮", title: "三国时期政治家", description: "蜀汉丞相，事无巨细，注重规则和细节，善于管理和执行。" },
+                    { name: "曾国藩", title: "清代政治家", description: "注重修身齐家，建立湘军，平定太平天国，强调纪律和秩序。" },
+                    { name: "比尔·盖茨", title: "企业家、慈善家", description: "微软公司创始人，注重细节和效率，善于管理和执行复杂项目。" }
+                ],
+                "ENFP": [
+                    { name: "苏轼", title: "宋代文学家", description: "多才多艺，作品充满乐观和创造力，善于从苦难中寻找乐趣。" },
+                    { name: "马克·吐温", title: "美国作家", description: "幽默讽刺作家，善于观察和表达，代表作品《汤姆·索亚历险记》。" },
+                    { name: "马云", title: "企业家", description: "阿里巴巴创始人，善于激励他人和把握机会，充满激情和创造力。" }
+                ],
+                "ENTP": [
+                    { name: "庄子", title: "战国时期哲学家", description: "道家代表人物，善于辩论和挑战传统观念，思想充满想象力。" },
+                    { name: "达芬奇", title: "意大利艺术家、科学家", description: "文艺复兴时期的全才，在绘画、科学、工程等领域都有重要贡献。" },
+                    { name: "理查德·布兰森", title: "企业家", description: "维珍集团创始人，善于创新和挑战传统，涉足多个行业。" }
+                ],
+                "ENFJ": [
+                    { name: "孔子", title: "儒家创始人", description: "思想家、教育家，致力于传播仁爱和道德，善于启发和引导他人。" },
+                    { name: "马丁·路德·金", title: "美国民权运动领袖", description: "致力于种族平等，善于演讲和激励他人，诺贝尔和平奖获得者。" },
+                    { name: "奥普拉·温弗瑞", title: "媒体人、慈善家", description: "著名脱口秀主持人，善于沟通和启发他人，关注社会公益。" }
+                ],
+                "ENTJ": [
+                    { name: "汉武帝", title: "西汉皇帝", description: "扩大汉朝疆域，推行盐铁专卖等政策，善于领导和决策。" },
+                    { name: "拿破仑", title: "法国皇帝", description: "军事天才，征服欧洲大部分地区，善于战略规划和领导。" },
+                    { name: "董明珠", title: "企业家", description: "格力电器董事长，果断坚决，善于领导和管理，注重效率和结果。" }
+                ],
+                "ESFP": [
+                    { name: "杨贵妃", title: "唐代贵妃", description: "以美貌和才艺著称，善于享受生活和表达情感。" },
+                    { name: "卓别林", title: "英国演员、导演", description: "喜剧大师，善于通过表演和肢体语言表达情感，带给观众欢乐。" },
+                    { name: "小S", title: "台湾主持人", description: "活泼开朗，善于表达和娱乐他人，充满活力和幽默感。" }
+                ],
+                "ESTP": [
+                    { name: "班超", title: "东汉外交家", description: "出使西域，以果断和勇气著称，善于应变和解决实际问题。" },
+                    { name: "丘吉尔", title: "英国首相", description: "二战期间领导英国抵抗纳粹，善于演讲和决策，充满勇气和决心。" },
+                    { name: "特朗普", title: "美国前总统", description: "企业家、政治家，善于把握机会和应对挑战，风格果断直接。" }
+                ],
+                "ESFJ": [
+                    { name: "薛宝钗", title: "《红楼梦》人物", description: "善于处理人际关系，关心他人需求，注重和谐和传统。" },
+                    { name: "特蕾莎修女", title: "天主教修女", description: "诺贝尔和平奖获得者，致力于帮助贫困和患病者，充满爱心和关怀。" },
+                    { name: "林志玲", title: "台湾艺人", description: "善于社交和照顾他人需求，注重和谐的人际关系，形象优雅大方。" }
+                ],
+                "ESTJ": [
+                    { name: "康熙皇帝", title: "清朝皇帝", description: "平定三藩之乱，收复台湾，善于管理和决策，注重秩序和稳定。" },
+                    { name: "曹操", title: "三国时期政治家", description: "魏国创始人，善于管理和决策，注重效率和结果。" },
+                    { name: "董明珠", title: "企业家", description: "格力电器董事长，果断坚决，善于领导和管理，注重效率和结果。" }
+                ]
+            };
+            
+            return people[type] || people['INFP'];
+        }
+        
+        // Get development stages based on MBTI type
+        function getDevelopmentStages(type) {
+            const stages = {
+                "INFP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "INFP在这个阶段主要发展Fi（内向情感）功能，形成强烈的个人价值观和理想。他们开始探索自己的身份和信仰，对世界充满理想主义的憧憬。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "INFP在这个阶段发展Ne（外向直觉）功能，开始将自己的价值观与外部世界连接。他们探索各种可能性，尝试将理想付诸实践，可能经历理想与现实的冲突。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "INFP在这个阶段发展Si（内向感觉）功能，开始回顾和整合过去的经验。他们更加注重实际的细节和具体的步骤，学会在理想和现实之间找到平衡。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "INFP在这个阶段发展Te（外向思考）功能，开始更加系统地组织和表达自己的想法。他们可能将一生的经验和智慧总结成有结构的理论或指导原则，为他人提供启发。"
+                    }
+                ],
+                "INTJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "INTJ在这个阶段主要发展Ni（内向直觉）功能，形成对未来的愿景和洞察力。他们开始构建自己的理论框架，对复杂系统和抽象概念产生兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "INTJ在这个阶段发展Te（外向思考）功能，开始将自己的愿景转化为实际计划。他们学习组织和管理资源，追求效率和结果，可能在事业上取得显著成就。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "INTJ在这个阶段发展Fi（内向情感）功能，开始更加关注自己的价值观和情感需求。他们可能重新评估自己的目标和优先级，寻找更有意义的生活方式。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "INTJ在这个阶段发展Se（外向感觉）功能，开始更加关注当下的体验和感官世界。他们可能学会放松和享受生活，不再那么执着于目标和成就。"
+                    }
+                ],
+                "INFJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "INFJ在这个阶段主要发展Ni（内向直觉）功能，形成深刻的洞察力和对未来的愿景。他们开始探索自己的使命感和价值观，对人类的潜能充满信心。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "INFJ在这个阶段发展Fe（外向情感）功能，开始将自己的愿景与他人的需求连接。他们学习理解和支持他人，可能在教育、咨询或社会服务领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "INFJ在这个阶段发展Ti（内向思考）功能，开始更加深入地分析和理解复杂系统。他们可能将自己的经验和洞察整合成有结构的理论或模型，为他人提供更有价值的指导。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "INFJ在这个阶段发展Se（外向感觉）功能，开始更加关注当下的体验和感官世界。他们可能学会平衡理想和现实，更加享受生活的简单乐趣。"
+                    }
+                ],
+                "INTP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "INTP在这个阶段主要发展Ti（内向思考）功能，形成强大的逻辑分析能力。他们开始探索各种理论和概念，对知识和理解有强烈的渴望。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "INTP在这个阶段发展Ne（外向直觉）功能，开始将自己的逻辑框架与外部世界连接。他们探索各种可能性和联系，可能在科学、技术或学术领域做出重要贡献。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "INTP在这个阶段发展Si（内向感觉）功能，开始回顾和整合过去的经验。他们可能更加注重实际应用和具体细节，学会将理论转化为实践。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "INTP在这个阶段发展Fe（外向情感）功能，开始更加关注他人的情感需求。他们可能学会表达自己的情感，建立更深层次的人际关系。"
+                    }
+                ],
+                "ISFP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ISFP在这个阶段主要发展Fi（内向情感）功能，形成强烈的个人价值观和审美感。他们开始探索自己的创造力和艺术表达，对美和和谐有敏锐的感知。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ISFP在这个阶段发展Se（外向感觉）功能，开始将自己的价值观与当下的体验连接。他们学习通过行动和感官体验表达自己，可能在艺术、设计或手工艺领域发挥天赋。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ISFP在这个阶段发展Ni（内向直觉）功能，开始更加关注深层含义和长远趋势。他们可能将自己的经验和洞察整合成更有深度的艺术表达或生活哲学。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ISFP在这个阶段发展Te（外向思考）功能，开始更加系统地组织和表达自己的想法。他们可能将一生的经验和智慧总结成有结构的指导原则，为他人提供启发。"
+                    }
+                ],
+                "ISTP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ISTP在这个阶段主要发展Ti（内向思考）功能，形成强大的逻辑分析能力。他们开始探索各种系统和机制，对事物的工作原理有强烈的好奇心。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ISTP在这个阶段发展Se（外向感觉）功能，开始将自己的逻辑框架与当下的体验连接。他们学习通过行动和实践解决问题，可能在技术、工程或手工艺领域发挥天赋。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ISTP在这个阶段发展Ni（内向直觉）功能，开始更加关注深层含义和长远趋势。他们可能将自己的经验和洞察整合成更有深度的理论或模型，为他人提供更有价值的指导。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ISTP在这个阶段发展Fe（外向情感）功能，开始更加关注他人的情感需求。他们可能学会表达自己的情感，建立更深层次的人际关系。"
+                    }
+                ],
+                "ISFJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ISFJ在这个阶段主要发展Si（内向感觉）功能，形成强大的记忆和细节处理能力。他们开始学习和吸收传统和经验，对稳定和安全有强烈的需求。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ISFJ在这个阶段发展Fe（外向情感）功能，开始将自己的经验和知识用于帮助他人。他们学习理解和支持他人，可能在教育、医疗或社会服务领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ISFJ在这个阶段发展Ti（内向思考）功能，开始更加深入地分析和理解复杂系统。他们可能将自己的经验和知识整合成有结构的理论或模型，为他人提供更有价值的指导。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ISFJ在这个阶段发展Ne（外向直觉）功能，开始更加关注新的可能性和创新。他们可能学会接受变化和不确定性，更加开放地探索新的想法和体验。"
+                    }
+                ],
+                "ISTJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ISTJ在这个阶段主要发展Si（内向感觉）功能，形成强大的记忆和细节处理能力。他们开始学习和吸收传统和经验，对规则和秩序有强烈的需求。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ISTJ在这个阶段发展Te（外向思考）功能，开始将自己的经验和知识用于组织和管理。他们学习规划和执行任务，可能在管理、行政或技术领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ISTJ在这个阶段发展Fi（内向情感）功能，开始更加关注自己的价值观和情感需求。他们可能重新评估自己的目标和优先级，寻找更有意义的生活方式。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ISTJ在这个阶段发展Ne（外向直觉）功能，开始更加关注新的可能性和创新。他们可能学会接受变化和不确定性，更加开放地探索新的想法和体验。"
+                    }
+                ],
+                "ENFP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ENFP在这个阶段主要发展Ne（外向直觉）功能，形成强大的创造力和探索精神。他们开始探索各种可能性和联系，对世界充满好奇心和热情。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ENFP在这个阶段发展Fi（内向情感）功能，开始将自己的创造力与个人价值观连接。他们学习表达自己的情感和理想，可能在创意、教育或咨询领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ENFP在这个阶段发展Te（外向思考）功能，开始更加系统地组织和执行自己的想法。他们可能学会专注和完成项目，将创意转化为实际成果。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ENFP在这个阶段发展Si（内向感觉）功能，开始更加关注传统和经验。他们可能将一生的经验和智慧总结成有价值的教训，为他人提供指导和启发。"
+                    }
+                ],
+                "ENTP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ENTP在这个阶段主要发展Ne（外向直觉）功能，形成强大的创造力和探索精神。他们开始探索各种可能性和联系，对辩论和挑战有强烈的兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ENTP在这个阶段发展Ti（内向思考）功能，开始将自己的创造力与逻辑分析连接。他们学习分析和理解复杂系统，可能在科学、技术或创业领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ENTP在这个阶段发展Fe（外向情感）功能，开始更加关注他人的情感需求。他们可能学会平衡逻辑和情感，建立更深层次的人际关系。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ENTP在这个阶段发展Si（内向感觉）功能，开始更加关注传统和经验。他们可能将一生的经验和智慧总结成有价值的教训，为他人提供指导和启发。"
+                    }
+                ],
+                "ENFJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ENFJ在这个阶段主要发展Fe（外向情感）功能，形成强大的同理心和社交能力。他们开始关注他人的需求和情感，对领导和启发他人有强烈的兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ENFJ在这个阶段发展Ni（内向直觉）功能，开始将自己的社交能力与深刻的洞察力连接。他们学习理解他人的动机和潜能，可能在教育、咨询或领导岗位发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ENFJ在这个阶段发展Se（外向感觉）功能，开始更加关注当下的体验和感官世界。他们可能学会平衡理想和现实，更加享受生活的简单乐趣。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ENFJ在这个阶段发展Ti（内向思考）功能，开始更加深入地分析和理解复杂系统。他们可能将自己的经验和洞察整合成有结构的理论或模型，为他人提供更有价值的指导。"
+                    }
+                ],
+                "ENTJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ENTJ在这个阶段主要发展Te（外向思考）功能，形成强大的组织和领导能力。他们开始关注目标和结果，对管理和决策有强烈的兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ENTJ在这个阶段发展Ni（内向直觉）功能，开始将自己的领导能力与深刻的洞察力连接。他们学习制定战略和规划未来，可能在商业、政治或领导岗位发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ENTJ在这个阶段发展Se（外向感觉）功能，开始更加关注当下的体验和感官世界。他们可能学会平衡目标和享受，不再那么执着于成就和结果。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ENTJ在这个阶段发展Fi（内向情感）功能，开始更加关注自己的价值观和情感需求。他们可能重新评估自己的目标和优先级，寻找更有意义的生活方式。"
+                    }
+                ],
+                "ESFP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ESFP在这个阶段主要发展Se（外向感觉）功能，形成强大的感官体验和表达能力。他们开始享受当下的生活，对艺术和表演有强烈的兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ESFP在这个阶段发展Fi（内向情感）功能，开始将自己的感官体验与个人价值观连接。他们学习表达自己的情感和创造力，可能在艺术、表演或娱乐领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ESFP在这个阶段发展Te（外向思考）功能，开始更加系统地组织和执行自己的想法。他们可能学会平衡创意和实用，将灵感转化为实际成果。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ESFP在这个阶段发展Ni（内向直觉）功能，开始更加关注深层含义和长远趋势。他们可能将一生的经验和智慧总结成有价值的教训，为他人提供指导和启发。"
+                    }
+                ],
+                "ESTP": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ESTP在这个阶段主要发展Se（外向感觉）功能，形成强大的感官体验和行动能力。他们开始享受当下的生活，对挑战和冒险有强烈的兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ESTP在这个阶段发展Ti（内向思考）功能，开始将自己的行动能力与逻辑分析连接。他们学习分析和解决实际问题，可能在商业、技术或创业领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ESTP在这个阶段发展Fe（外向情感）功能，开始更加关注他人的情感需求。他们可能学会平衡逻辑和情感，建立更深层次的人际关系。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ESTP在这个阶段发展Ni（内向直觉）功能，开始更加关注深层含义和长远趋势。他们可能将一生的经验和智慧总结成有价值的教训，为他人提供指导和启发。"
+                    }
+                ],
+                "ESFJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ESFJ在这个阶段主要发展Fe（外向情感）功能，形成强大的同理心和社交能力。他们开始关注他人的需求和情感，对帮助和支持他人有强烈的兴趣。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ESFJ在这个阶段发展Si（内向感觉）功能，开始将自己的社交能力与传统和经验连接。他们学习维护和谐的人际关系，可能在教育、医疗或社会服务领域发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ESFJ在这个阶段发展Te（外向思考）功能，开始更加系统地组织和执行自己的想法。他们可能学会平衡情感和理性，在帮助他人的同时也关注实际的结果。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ESFJ在这个阶段发展Ni（内向直觉）功能，开始更加关注深层含义和长远趋势。他们可能将一生的经验和智慧总结成有价值的教训，为他人提供指导和启发。"
+                    }
+                ],
+                "ESTJ": [
+                    { 
+                        age: "0-20岁", 
+                        title: "主导功能发展期", 
+                        description: "ESTJ在这个阶段主要发展Te（外向思考）功能，形成强大的组织和领导能力。他们开始关注目标和结果，对规则和秩序有强烈的需求。"
+                    },
+                    { 
+                        age: "20-40岁", 
+                        title: "辅助功能发展期", 
+                        description: "ESTJ在这个阶段发展Si（内向感觉）功能，开始将自己的领导能力与传统和经验连接。他们学习维护稳定和秩序，可能在管理、行政或领导岗位发挥重要作用。"
+                    },
+                    { 
+                        age: "40-60岁", 
+                        title: "第三功能发展期", 
+                        description: "ESTJ在这个阶段发展Fe（外向情感）功能，开始更加关注他人的情感需求。他们可能学会平衡理性和情感，在追求结果的同时也关注团队的和谐。"
+                    },
+                    { 
+                        age: "60岁以上", 
+                        title: "第四功能发展期", 
+                        description: "ESTJ在这个阶段发展Ni（内向直觉）功能，开始更加关注深层含义和长远趋势。他们可能将一生的经验和智慧总结成有价值的教训，为他人提供指导和启发。"
+                    }
+                ]
+            };
+            
+            return stages[type] || stages['INFP'];
+        }
+        
+        // Get cultural perspectives based on MBTI type
+        function getCulturalPerspectives(type) {
+            const perspectives = {
+                "INFP": {
+                    western: [
+                        "在西方文化中，INFP的理想主义和个人价值观受到重视，常被视为'追求真实自我'的典范。",
+                        "西方社会鼓励INFP表达自己的独特性和创造力，支持他们追求个人理想。",
+                        "在西方职场中，INFP可能面临的挑战是如何在竞争激烈的环境中保持自己的价值观。"
+                    ],
+                    eastern: [
+                        "在中国文化中，INFP的理想主义可能被视为'不切实际'，但他们的创造力和情感深度受到欣赏。",
+                        "东方社会强调集体和谐，INFP可能需要在个人价值观和集体需求之间寻找平衡。",
+                        "在东方职场中，INFP的同理心和创造力可以成为团队的宝贵资产，但他们可能需要更主动地表达自己的想法。"
+                    ]
+                },
+                "INTJ": {
+                    western: [
+                        "在西方文化中，INTJ的战略思维和独立思考受到高度重视，常被视为'天生的领导者'。",
+                        "西方社会鼓励INTJ追求自己的愿景和目标，支持他们的创新和变革精神。",
+                        "在西方职场中，INTJ可能面临的挑战是如何在团队中发挥领导力，同时也尊重他人的意见。"
+                    ],
+                    eastern: [
+                        "在中国文化中，INTJ的战略思维和执行力受到赞赏，但他们的直接表达方式可能需要调整。",
+                        "东方社会强调和谐和谦逊，INTJ可能需要在坚持自己的想法和尊重他人之间寻找平衡。",
+                        "在东方职场中，INTJ的长远规划能力可以成为组织的宝贵资产，但他们可能需要更注重人际关系的维护。"
+                    ]
+                },
+                "INFJ": {
+                    western: [
+                        "在西方文化中，INFJ的洞察力和同理心受到高度重视，常被视为'治愈者'和'启发者'。",
+                        "西方社会鼓励INFJ追求自己的使命感，支持他们的理想主义和创造力。",
+                        "在西方职场中，INFJ可能面临的挑战是如何在照顾他人需求的同时，也关注自己的需求。"
+                    ],
+                    eastern: [
+                        "在中国文化中，INFJ的洞察力和同理心与儒家的'仁爱'思想相契合，受到尊重。",
+                        "东方社会强调集体和谐，INFJ的调解能力和同理心可以成为团队的宝贵资产。",
+                        "在东方职场中，INFJ可能需要更主动地表达自己的想法，避免被忽视或误解。"
+                    ]
+                },
+                "INTP": {
+                    western: [
+                        "在西方文化中，INTP的逻辑思维和创新能力受到高度重视，常被视为'思想家'和'问题解决者'。",
+                        "西方社会鼓励INTP追求知识和理解，支持他们的好奇心和探索精神。",
+                        "在西方职场中，INTP可能面临的挑战是如何在注重团队合作的环境中发挥自己的独立性。"
+                    ],
+                    eastern: [
+                        "在中国文化中，INTP的逻辑思维和分析能力受到赞赏，但他们的内向和独立可能被视为'不合群'。",
+                        "东方社会强调集体和谐，INTP可能需要在独立思考和团队合作之间寻找平衡。",
+                        "在东方职场中，INTP的问题解决能力可以成为组织的宝贵资产，但他们可能需要更注重人际关系的维护。"
+                    ]
+                },
+                "ISFP": {
+                    western: [
+                        "在西方文化中，ISFP的艺术天赋和感官体验受到高度重视，常被视为'艺术家'和'创作者'。",
+                        "西方社会鼓励ISFP表达自己的创造力和个性，支持他们追求个人兴趣。",
+                        "在西方职场中，ISFP可能面临的挑战是如何在注重结果的环境中保持自己的艺术追求。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ISFP的艺术天赋和细腻感受与传统美学思想相契合，受到欣赏。",
+                        "东方社会强调实用主义，ISFP可能需要在艺术追求和实际需求之间寻找平衡。",
+                        "在东方职场中，ISFP的创造力和细节处理能力可以成为团队的宝贵资产，但他们可能需要更主动地表达自己的想法。"
+                    ]
+                },
+                "ISTP": {
+                    western: [
+                        "在西方文化中，ISTP的动手能力和解决问题的能力受到高度重视，常被视为'工程师'和'手艺人'。",
+                        "西方社会鼓励ISTP追求技术和实践，支持他们的好奇心和探索精神。",
+                        "在西方职场中，ISTP可能面临的挑战是如何在注重团队合作的环境中发挥自己的独立性。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ISTP的动手能力和解决问题的能力受到赞赏，但他们的内向和独立可能被视为'不合群'。",
+                        "东方社会强调集体和谐，ISTP可能需要在独立工作和团队合作之间寻找平衡。",
+                        "在东方职场中，ISTP的技术能力可以成为组织的宝贵资产，但他们可能需要更注重人际关系的维护。"
+                    ]
+                },
+                "ISFJ": {
+                    western: [
+                        "在西方文化中，ISFJ的责任感和关怀他人的能力受到高度重视，常被视为'守护者'和'照顾者'。",
+                        "西方社会鼓励ISFJ追求服务他人的职业，支持他们的奉献精神。",
+                        "在西方职场中，ISFJ可能面临的挑战是如何在照顾他人需求的同时，也关注自己的需求。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ISFJ的责任感和关怀他人的能力与儒家的'孝道'和'仁爱'思想相契合，受到高度尊重。",
+                        "东方社会强调家庭和集体和谐，ISFJ的奉献精神和细节处理能力可以成为家庭和团队的支柱。",
+                        "在东方职场中，ISFJ可能需要更主动地表达自己的想法，避免被忽视或低估。"
+                    ]
+                },
+                "ISTJ": {
+                    western: [
+                        "在西方文化中，ISTJ的责任感和执行力受到高度重视，常被视为'可靠的执行者'和'传统的守护者'。",
+                        "西方社会鼓励ISTJ追求稳定和秩序，支持他们的务实和严谨。",
+                        "在西方职场中，ISTJ可能面临的挑战是如何在快速变化的环境中保持自己的稳定性。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ISTJ的责任感和执行力与传统的'忠'和'信'思想相契合，受到高度尊重。",
+                        "东方社会强调秩序和稳定，ISTJ的严谨和可靠性可以成为组织的宝贵资产。",
+                        "在东方职场中，ISTJ可能需要更开放地接受新的想法和方法，避免过于固执。"
+                    ]
+                },
+                "ENFP": {
+                    western: [
+                        "在西方文化中，ENFP的创造力和热情受到高度重视，常被视为'灵感的源泉'和'团队的灵魂'。",
+                        "西方社会鼓励ENFP追求自己的梦想和热情，支持他们的创新和变革精神。",
+                        "在西方职场中，ENFP可能面临的挑战是如何在注重结果的环境中保持自己的创造力。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ENFP的创造力和热情受到赞赏，但他们的冲动和变化无常可能被视为'不可靠'。",
+                        "东方社会强调稳定和秩序，ENFP可能需要在创新和稳定之间寻找平衡。",
+                        "在东方职场中，ENFP的沟通能力和创造力可以成为团队的宝贵资产，但他们可能需要更注重细节和执行力。"
+                    ]
+                },
+                "ENTP": {
+                    western: [
+                        "在西方文化中，ENTP的辩论能力和创新思维受到高度重视，常被视为'思想的挑战者'和'创新的推动者'。",
+                        "西方社会鼓励ENTP挑战传统和权威，支持他们的好奇心和探索精神。",
+                        "在西方职场中，ENTP可能面临的挑战是如何在注重团队和谐的环境中发挥自己的辩论能力。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ENTP的辩论能力和创新思维受到赞赏，但他们的挑战精神可能被视为'不尊重权威'。",
+                        "东方社会强调和谐和谦逊，ENTP可能需要在表达自己的想法和尊重他人之间寻找平衡。",
+                        "在东方职场中，ENTP的创新能力可以成为组织的宝贵资产，但他们可能需要更注重人际关系的维护。"
+                    ]
+                },
+                "ENFJ": {
+                    western: [
+                        "在西方文化中，ENFJ的领导力和同理心受到高度重视，常被视为'天生的领导者'和'团队的灵魂'。",
+                        "西方社会鼓励ENFJ追求领导角色，支持他们的愿景和使命感。",
+                        "在西方职场中，ENFJ可能面临的挑战是如何在照顾他人需求的同时，也关注自己的需求。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ENFJ的领导力和同理心与儒家的'仁爱'和'中庸'思想相契合，受到高度尊重。",
+                        "东方社会强调集体和谐，ENFJ的领导能力和调解能力可以成为团队的宝贵资产。",
+                        "在东方职场中，ENFJ可能需要更注重实际结果，避免过于理想化。"
+                    ]
+                },
+                "ENTJ": {
+                    western: [
+                        "在西方文化中，ENTJ的领导力和战略思维受到高度重视，常被视为'天生的领导者'和'变革的推动者'。",
+                        "西方社会鼓励ENTJ追求领导角色，支持他们的愿景和执行力。",
+                        "在西方职场中，ENTJ可能面临的挑战是如何在团队中发挥领导力，同时也尊重他人的意见。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ENTJ的领导力和执行力受到赞赏，但他们的直接表达方式可能需要调整。",
+                        "东方社会强调和谐和谦逊，ENTJ可能需要在坚持自己的想法和尊重他人之间寻找平衡。",
+                        "在东方职场中，ENTJ的战略思维可以成为组织的宝贵资产，但他们可能需要更注重人际关系的维护。"
+                    ]
+                },
+                "ESFP": {
+                    western: [
+                        "在西方文化中，ESFP的活力和表演能力受到高度重视，常被视为'天生的表演者'和'团队的灵魂'。",
+                        "西方社会鼓励ESFP表达自己的创造力和个性，支持他们追求快乐和享受生活。",
+                        "在西方职场中，ESFP可能面临的挑战是如何在注重结果的环境中保持自己的活力和创造力。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ESFP的活力和表演能力受到赞赏，但他们的外向和冲动可能被视为'不成熟'。",
+                        "东方社会强调内敛和谦逊，ESFP可能需要在表达自己和尊重传统之间寻找平衡。",
+                        "在东方职场中，ESFP的沟通能力和创造力可以成为团队的宝贵资产，但他们可能需要更注重细节和执行力。"
+                    ]
+                },
+                "ESTP": {
+                    western: [
+                        "在西方文化中，ESTP的行动力和解决问题的能力受到高度重视，常被视为'天生的企业家'和'危机处理专家'。",
+                        "西方社会鼓励ESTP追求挑战和冒险，支持他们的实用主义和应变能力。",
+                        "在西方职场中，ESTP可能面临的挑战是如何在注重规则的环境中发挥自己的灵活性。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ESTP的行动力和解决问题的能力受到赞赏，但他们的冒险精神可能被视为'不稳重'。",
+                        "东方社会强调谨慎和计划，ESTP可能需要在行动和思考之间寻找平衡。",
+                        "在东方职场中，ESTP的应变能力可以成为组织的宝贵资产，但他们可能需要更注重规则和程序。"
+                    ]
+                },
+                "ESFJ": {
+                    western: [
+                        "在西方文化中，ESFJ的社交能力和关怀他人的能力受到高度重视，常被视为'天生的主持人'和'团队的粘合剂'。",
+                        "西方社会鼓励ESFJ追求服务他人的职业，支持他们的奉献精神和社交能力。",
+                        "在西方职场中，ESFJ可能面临的挑战是如何在照顾他人需求的同时，也关注自己的需求。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ESFJ的社交能力和关怀他人的能力与儒家的'仁爱'和'中庸'思想相契合，受到高度尊重。",
+                        "东方社会强调家庭和集体和谐，ESFJ的奉献精神和社交能力可以成为家庭和团队的支柱。",
+                        "在东方职场中，ESFJ可能需要更主动地表达自己的想法，避免被忽视或低估。"
+                    ]
+                },
+                "ESTJ": {
+                    western: [
+                        "在西方文化中，ESTJ的领导力和组织能力受到高度重视，常被视为'天生的管理者'和'传统的守护者'。",
+                        "西方社会鼓励ESTJ追求管理角色，支持他们的务实和执行力。",
+                        "在西方职场中，ESTJ可能面临的挑战是如何在快速变化的环境中保持自己的稳定性。"
+                    ],
+                    eastern: [
+                        "在中国文化中，ESTJ的领导力和组织能力与传统的'忠'和'信'思想相契合，受到高度尊重。",
+                        "东方社会强调秩序和稳定，ESTJ的严谨和可靠性可以成为组织的宝贵资产。",
+                        "在东方职场中，ESTJ可能需要更开放地接受新的想法和方法，避免过于固执。"
+                    ]
+                }
+            };
+            
+            return perspectives[type] || perspectives['INFP'];
+        }
+        
+        // Get dynamic changes based on MBTI type
+        function getDynamicChanges(type) {
+            const changes = {
+                "INFP": {
+                    growthPath: [
+                        "从理想主义者到实践型理想主义者：学会将自己的价值观转化为实际行动",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡",
+                        "从内向反思到内外平衡：学会在自我反思和外部世界之间找到平衡",
+                        "从个人追求到服务他人：学会将个人理想与更大的社会价值连接"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的期望",
+                        "30-40岁：可能更加注重实际结果，学会在理想和现实之间找到平衡",
+                        "40-50岁：可能更加关注自己的价值观和人生意义，重新评估自己的目标",
+                        "50岁以上：可能更加宽容和理解，学会接受自己和他人的不完美"
+                    ]
+                },
+                "INTJ": {
+                    growthPath: [
+                        "从战略家到实践型战略家：学会将自己的愿景转化为实际行动",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡",
+                        "从独立思考到团队合作：学会在独立思考和团队合作之间找到平衡",
+                        "从控制导向到灵活适应：学会在控制和适应之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理论与实践的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重实际结果，学会在战略和执行之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加开放和灵活，学会接受变化和不确定性"
+                    ]
+                },
+                "INFJ": {
+                    growthPath: [
+                        "从理想主义者到实践型理想主义者：学会将自己的愿景转化为实际行动",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡",
+                        "从内向反思到内外平衡：学会在自我反思和外部世界之间找到平衡",
+                        "从关注他人到自我关怀：学会在照顾他人和照顾自己之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的期望",
+                        "30-40岁：可能更加注重实际结果，学会在理想和现实之间找到平衡",
+                        "40-50岁：可能更加关注自己的需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加宽容和理解，学会接受自己和他人的不完美"
+                    ]
+                },
+                "INTP": {
+                    growthPath: [
+                        "从理论家到实践型理论家：学会将自己的理论转化为实际应用",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡",
+                        "从独立思考到团队合作：学会在独立思考和团队合作之间找到平衡",
+                        "从抽象思考到具体应用：学会在抽象思考和具体应用之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理论与实践的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重实际结果，学会在理论和应用之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加开放和灵活，学会接受变化和不确定性"
+                    ]
+                },
+                "ISFP": {
+                    growthPath: [
+                        "从艺术家到实践型艺术家：学会将自己的创造力转化为实际作品",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡",
+                        "从当下体验到长远规划：学会在当下体验和长远规划之间找到平衡",
+                        "从内向表达外向分享：学会在个人表达和分享给他人之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的期望",
+                        "30-40岁：可能更加注重实际结果，学会在艺术和生活之间找到平衡",
+                        "40-50岁：可能更加关注自己的价值观和人生意义，重新评估自己的目标",
+                        "50岁以上：可能更加自信和从容，学会欣赏自己的独特性"
+                    ]
+                },
+                "ISTP": {
+                    growthPath: [
+                        "从技术专家到实践型技术专家：学会将自己的技术能力转化为实际成果",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡",
+                        "从独立工作到团队合作：学会在独立工作和团队合作之间找到平衡",
+                        "从当下解决到长远规划：学会在当下解决和长远规划之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历技术与应用的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重实际结果，学会在技术和生活之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加开放和灵活，学会分享自己的知识和经验"
+                    ]
+                },
+                "ISFJ": {
+                    growthPath: [
+                        "从照顾者到平衡型照顾者：学会在照顾他人和照顾自己之间找到平衡",
+                        "从传统导向到创新适应：学会在传统和创新之间找到平衡",
+                        "从细节关注到大局把握：学会在细节和大局之间找到平衡",
+                        "从内向表达到外向分享：学会在个人表达和分享给他人之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历责任与自我的冲突，开始调整自己的角色",
+                        "30-40岁：可能更加注重自己的需求，学会在照顾他人和照顾自己之间找到平衡",
+                        "40-50岁：可能更加开放地接受新的想法，重新评估自己的价值观",
+                        "50岁以上：可能更加自信和从容，学会欣赏自己的贡献和价值"
+                    ]
+                },
+                "ISTJ": {
+                    growthPath: [
+                        "从执行者到平衡型执行者：学会在执行和创新之间找到平衡",
+                        "从传统导向到创新适应：学会在传统和创新之间找到平衡",
+                        "从细节关注到大局把握：学会在细节和大局之间找到平衡",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历规则与变化的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重实际结果，学会在规则和创新之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加开放和灵活，学会接受变化和不确定性"
+                    ]
+                },
+                "ENFP": {
+                    growthPath: [
+                        "从梦想家到实践型梦想家：学会将自己的梦想转化为实际行动",
+                        "从发散思维到聚焦执行：学会在发散思维和聚焦执行之间找到平衡",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡",
+                        "从外部探索到内在反思：学会在外部探索和内在反思之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的期望",
+                        "30-40岁：可能更加注重实际结果，学会在梦想和现实之间找到平衡",
+                        "40-50岁：可能更加关注自己的价值观和人生意义，重新评估自己的目标",
+                        "50岁以上：可能更加沉稳和内敛，学会在行动和反思之间找到平衡"
+                    ]
+                },
+                "ENTP": {
+                    growthPath: [
+                        "从辩论家到建设性辩论家：学会将自己的辩论能力转化为建设性成果",
+                        "从发散思维到聚焦执行：学会在发散思维和聚焦执行之间找到平衡",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡",
+                        "从挑战传统到尊重传统：学会在挑战传统和尊重传统之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重实际结果，学会在理论和应用之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加沉稳和内敛，学会在挑战和尊重之间找到平衡"
+                    ]
+                },
+                "ENFJ": {
+                    growthPath: [
+                        "从领导者到服务型领导者：学会将自己的领导力转化为服务他人",
+                        "从关注他人到自我关怀：学会在关注他人和关注自己之间找到平衡",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡",
+                        "从理想主义到实践型理想主义：学会在理想和现实之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的期望",
+                        "30-40岁：可能更加注重实际结果，学会在理想和现实之间找到平衡",
+                        "40-50岁：可能更加关注自己的需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加宽容和理解，学会接受自己和他人的不完美"
+                    ]
+                },
+                "ENTJ": {
+                    growthPath: [
+                        "从领导者到服务型领导者：学会将自己的领导力转化为服务他人",
+                        "从控制导向到灵活适应：学会在控制和适应之间找到平衡",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡",
+                        "从目标导向到过程享受：学会在目标和过程之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历控制与变化的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重团队合作，学会在领导和合作之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加开放和灵活，学会接受变化和不确定性"
+                    ]
+                },
+                "ESFP": {
+                    growthPath: [
+                        "从表演者到平衡型表演者：学会在表演和生活之间找到平衡",
+                        "从当下体验到长远规划：学会在当下体验和长远规划之间找到平衡",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡",
+                        "从外部关注到内在反思：学会在外部关注和内在反思之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历理想与现实的冲突，开始调整自己的期望",
+                        "30-40岁：可能更加注重实际结果，学会在表演和生活之间找到平衡",
+                        "40-50岁：可能更加关注自己的价值观和人生意义，重新评估自己的目标",
+                        "50岁以上：可能更加沉稳和内敛，学会在行动和反思之间找到平衡"
+                    ]
+                },
+                "ESTP": {
+                    growthPath: [
+                        "从行动者到平衡型行动者：学会在行动和思考之间找到平衡",
+                        "从当下解决到长远规划：学会在当下解决和长远规划之间找到平衡",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡",
+                        "从冒险精神到谨慎判断：学会在冒险和谨慎之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历冲动与后果的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重实际结果，学会在行动和思考之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加沉稳和内敛，学会在冒险和谨慎之间找到平衡"
+                    ]
+                },
+                "ESFJ": {
+                    growthPath: [
+                        "从照顾者到平衡型照顾者：学会在照顾他人和照顾自己之间找到平衡",
+                        "从传统导向到创新适应：学会在传统和创新之间找到平衡",
+                        "从外部关注到内在反思：学会在外部关注和内在反思之间找到平衡",
+                        "从情感主导到平衡发展：学会在情感和理性之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历责任与自我的冲突，开始调整自己的角色",
+                        "30-40岁：可能更加注重自己的需求，学会在照顾他人和照顾自己之间找到平衡",
+                        "40-50岁：可能更加开放地接受新的想法，重新评估自己的价值观",
+                        "50岁以上：可能更加自信和从容，学会欣赏自己的贡献和价值"
+                    ]
+                },
+                "ESTJ": {
+                    growthPath: [
+                        "从领导者到服务型领导者：学会将自己的领导力转化为服务他人",
+                        "从控制导向到灵活适应：学会在控制和适应之间找到平衡",
+                        "从传统导向到创新适应：学会在传统和创新之间找到平衡",
+                        "从理性主导到平衡发展：学会在理性和情感之间找到平衡"
+                    ],
+                    typicalChanges: [
+                        "20-30岁：可能经历控制与变化的冲突，开始调整自己的方法",
+                        "30-40岁：可能更加注重团队合作，学会在领导和合作之间找到平衡",
+                        "40-50岁：可能更加关注自己的情感需求，重新评估自己的目标和优先级",
+                        "50岁以上：可能更加开放和灵活，学会接受变化和不确定性"
+                    ]
+                }
+            };
+            
+            return changes[type] || changes['INFP'];
+        }
+        
+        // Get learning styles based on MBTI type
+        function getLearningStyles(type) {
+            const styles = {
+                "INFP": {
+                    strengths: [
+                        "富有创造力和想象力",
+                        "善于理解抽象概念和理论",
+                        "注重学习内容的意义和价值",
+                        "善于从多角度思考问题"
+                    ],
+                    challenges: [
+                        "可能过度理想化，脱离实际",
+                        "在压力下可能变得焦虑或自我怀疑",
+                        "可能忽视细节和具体步骤",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找与个人价值观相关的学习内容",
+                        "使用思维导图和视觉化工具整理思路",
+                        "通过写作和创造性活动深化理解",
+                        "寻找支持性的学习环境，避免过度竞争"
+                    ]
+                },
+                "INTJ": {
+                    strengths: [
+                        "强大的逻辑思维和分析能力",
+                        "善于理解复杂系统和理论",
+                        "注重学习内容的实用性和效率",
+                        "善于制定和执行学习计划"
+                    ],
+                    challenges: [
+                        "可能过度关注理论，忽视实际应用",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视学习过程中的情感因素",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有挑战性和智力刺激的学习内容",
+                        "使用逻辑框架和系统分析整理知识",
+                        "设定明确的学习目标和时间表",
+                        "寻找能够讨论和辩论的学习伙伴"
+                    ]
+                },
+                "INFJ": {
+                    strengths: [
+                        "深刻的洞察力和理解力",
+                        "善于理解抽象概念和理论",
+                        "注重学习内容的意义和价值",
+                        "善于从多角度思考问题"
+                    ],
+                    challenges: [
+                        "可能过度理想化，脱离实际",
+                        "在压力下可能变得焦虑或自我怀疑",
+                        "可能忽视细节和具体步骤",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找与个人使命感相关的学习内容",
+                        "使用思维导图和视觉化工具整理思路",
+                        "通过写作和创造性活动深化理解",
+                        "寻找能够深入讨论的学习伙伴"
+                    ]
+                },
+                "INTP": {
+                    strengths: [
+                        "强大的逻辑思维和分析能力",
+                        "善于理解复杂系统和理论",
+                        "注重学习内容的逻辑性和一致性",
+                        "善于独立思考和解决问题"
+                    ],
+                    challenges: [
+                        "可能过度关注理论，忽视实际应用",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视学习过程中的情感因素",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有挑战性和智力刺激的学习内容",
+                        "使用逻辑框架和系统分析整理知识",
+                        "通过解决实际问题深化理解",
+                        "寻找能够讨论和辩论的学习伙伴"
+                    ]
+                },
+                "ISFP": {
+                    strengths: [
+                        "敏锐的感官体验和观察力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和美感",
+                        "善于动手操作和创造"
+                    ],
+                    challenges: [
+                        "可能过度关注细节，忽视大局",
+                        "在压力下可能变得焦虑或自我怀疑",
+                        "可能忽视抽象概念和理论",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找能够动手操作的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用视觉化和艺术化的方式整理知识",
+                        "寻找支持性的学习环境，避免过度竞争"
+                    ]
+                },
+                "ISTP": {
+                    strengths: [
+                        "强大的动手能力和解决问题的能力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和效率",
+                        "善于独立思考和解决问题"
+                    ],
+                    challenges: [
+                        "可能过度关注细节，忽视大局",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视抽象概念和理论",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找能够动手操作的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用逻辑框架和系统分析整理知识",
+                        "寻找能够一起实践的学习伙伴"
+                    ]
+                },
+                "ISFJ": {
+                    strengths: [
+                        "强大的记忆和细节处理能力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和传统",
+                        "善于帮助他人学习和理解"
+                    ],
+                    challenges: [
+                        "可能过度关注细节，忽视大局",
+                        "在压力下可能变得焦虑或自我怀疑",
+                        "可能忽视抽象概念和理论",
+                        "不善于接受新的学习方法"
+                    ],
+                    strategies: [
+                        "寻找与传统和经验相关的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用结构化和系统化的方式整理知识",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ISTJ": {
+                    strengths: [
+                        "强大的记忆和细节处理能力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和效率",
+                        "善于制定和执行学习计划"
+                    ],
+                    challenges: [
+                        "可能过度关注细节，忽视大局",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视抽象概念和理论",
+                        "不善于接受新的学习方法"
+                    ],
+                    strategies: [
+                        "寻找具有明确目标和步骤的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用结构化和系统化的方式整理知识",
+                        "设定明确的学习目标和时间表"
+                    ]
+                },
+                "ENFP": {
+                    strengths: [
+                        "富有创造力和想象力",
+                        "善于从多角度思考问题",
+                        "注重学习内容的意义和价值",
+                        "善于与他人合作学习"
+                    ],
+                    challenges: [
+                        "可能过度分散精力，无法集中",
+                        "在压力下可能变得焦虑或冲动",
+                        "可能忽视细节和具体步骤",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有创新性和多样性的学习内容",
+                        "使用思维导图和视觉化工具整理思路",
+                        "通过讨论和头脑风暴深化理解",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ENTP": {
+                    strengths: [
+                        "强大的逻辑思维和分析能力",
+                        "善于从多角度思考问题",
+                        "注重学习内容的逻辑性和一致性",
+                        "善于辩论和挑战传统观念"
+                    ],
+                    challenges: [
+                        "可能过度分散精力，无法集中",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视细节和具体步骤",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有挑战性和智力刺激的学习内容",
+                        "使用逻辑框架和系统分析整理知识",
+                        "通过讨论和辩论深化理解",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ENFJ": {
+                    strengths: [
+                        "深刻的洞察力和理解力",
+                        "善于从多角度思考问题",
+                        "注重学习内容的意义和价值",
+                        "善于帮助他人学习和理解"
+                    ],
+                    challenges: [
+                        "可能过度关注他人需求，忽视自身",
+                        "在压力下可能变得焦虑或自我怀疑",
+                        "可能忽视细节和具体步骤",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找与个人使命感相关的学习内容",
+                        "使用思维导图和视觉化工具整理思路",
+                        "通过讨论和教学深化理解",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ENTJ": {
+                    strengths: [
+                        "强大的逻辑思维和分析能力",
+                        "善于制定和执行学习计划",
+                        "注重学习内容的实用性和效率",
+                        "善于领导和组织学习活动"
+                    ],
+                    challenges: [
+                        "可能过度控制和支配他人",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视学习过程中的情感因素",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有挑战性和智力刺激的学习内容",
+                        "使用逻辑框架和系统分析整理知识",
+                        "设定明确的学习目标和时间表",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ESFP": {
+                    strengths: [
+                        "敏锐的感官体验和观察力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和乐趣",
+                        "善于与他人合作学习"
+                    ],
+                    challenges: [
+                        "可能过度关注当下，忽视长远",
+                        "在压力下可能变得焦虑或冲动",
+                        "可能忽视抽象概念和理论",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有趣味性和多样性的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用视觉化和艺术化的方式整理知识",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ESTP": {
+                    strengths: [
+                        "强大的动手能力和解决问题的能力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和效率",
+                        "善于在压力下学习和表现"
+                    ],
+                    challenges: [
+                        "可能过度关注当下，忽视长远",
+                        "在压力下可能变得固执或冲动",
+                        "可能忽视抽象概念和理论",
+                        "不善于记忆和重复学习"
+                    ],
+                    strategies: [
+                        "寻找具有挑战性和实践性的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用逻辑框架和系统分析整理知识",
+                        "寻找能够一起实践的学习伙伴"
+                    ]
+                },
+                "ESFJ": {
+                    strengths: [
+                        "强大的记忆和细节处理能力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和传统",
+                        "善于帮助他人学习和理解"
+                    ],
+                    challenges: [
+                        "可能过度关注他人需求，忽视自身",
+                        "在压力下可能变得焦虑或自我怀疑",
+                        "可能忽视抽象概念和理论",
+                        "不善于接受新的学习方法"
+                    ],
+                    strategies: [
+                        "寻找与传统和经验相关的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用结构化和系统化的方式整理知识",
+                        "寻找能够一起学习的小组或伙伴"
+                    ]
+                },
+                "ESTJ": {
+                    strengths: [
+                        "强大的组织和领导能力",
+                        "善于通过实践和体验学习",
+                        "注重学习内容的实用性和效率",
+                        "善于制定和执行学习计划"
+                    ],
+                    challenges: [
+                        "可能过度控制和支配他人",
+                        "在压力下可能变得固执或过度批判",
+                        "可能忽视抽象概念和理论",
+                        "不善于接受新的学习方法"
+                    ],
+                    strategies: [
+                        "寻找具有明确目标和步骤的学习内容",
+                        "通过实践和体验深化理解",
+                        "使用结构化和系统化的方式整理知识",
+                        "设定明确的学习目标和时间表"
+                    ]
+                }
+            };
+            
+            return styles[type] || styles['INFP'];
+        }
+        
+        // Get health patterns based on MBTI type
+        function getHealthPatterns(type) {
+            const patterns = {
+                "INFP": {
+                    physical: [
+                        "可能因过度内省和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因情绪波动导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度自我批评和自我怀疑",
+                        "可能因理想与现实差距感到沮丧",
+                        "可能因过度共情导致情感疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，避免过度共情",
+                        "通过创造性活动释放情感和压力",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "INTJ": {
+                    physical: [
+                        "可能因过度工作和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因久坐不动导致背部和颈部问题"
+                    ],
+                    mental: [
+                        "可能过度批判自己和他人",
+                        "可能因无法控制局面感到焦虑",
+                        "可能因过度思考导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "练习正念和放松技巧，如冥想和深呼吸",
+                        "培养兴趣爱好，避免过度工作"
+                    ]
+                },
+                "INFJ": {
+                    physical: [
+                        "可能因过度共情和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因情绪波动导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因理想与现实差距感到沮丧",
+                        "可能因过度思考导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "通过创造性活动释放情感和压力",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "INTP": {
+                    physical: [
+                        "可能因过度思考和久坐导致头痛、背部和颈部问题",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因缺乏运动导致健康问题"
+                    ],
+                    mental: [
+                        "可能过度批判自己和他人",
+                        "可能因无法理解复杂问题感到焦虑",
+                        "可能因社交压力导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "练习正念和放松技巧，如冥想和深呼吸",
+                        "培养社交技能，避免过度孤立"
+                    ]
+                },
+                "ISFP": {
+                    physical: [
+                        "可能因过度关注感官体验导致饮食和睡眠问题",
+                        "可能因情绪波动导致消化系统问题",
+                        "可能因过度工作导致身体疲劳"
+                    ],
+                    mental: [
+                        "可能过度关注他人评价",
+                        "可能因无法表达自己感到沮丧",
+                        "可能因压力导致情感疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "通过创造性活动释放情感和压力",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ISTP": {
+                    physical: [
+                        "可能因过度工作和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因冒险行为导致意外受伤"
+                    ],
+                    mental: [
+                        "可能过度忽视情感需求",
+                        "可能因无法解决问题感到焦虑",
+                        "可能因社交压力导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "练习正念和放松技巧，如冥想和深呼吸",
+                        "培养情感表达能力，避免过度孤立"
+                    ]
+                },
+                "ISFJ": {
+                    physical: [
+                        "可能因过度照顾他人导致身体疲劳",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因压力导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因无法满足他人期望感到焦虑",
+                        "可能因过度工作导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ISTJ": {
+                    physical: [
+                        "可能因过度工作和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因久坐不动导致背部和颈部问题"
+                    ],
+                    mental: [
+                        "可能过度批判自己和他人",
+                        "可能因无法控制局面感到焦虑",
+                        "可能因变化导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "练习正念和放松技巧，如冥想和深呼吸",
+                        "学习接受变化和不确定性"
+                    ]
+                },
+                "ENFP": {
+                    physical: [
+                        "可能因过度活跃导致身体疲劳",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因情绪波动导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度分散精力，无法集中",
+                        "可能因无法实现理想感到焦虑",
+                        "可能因过度社交导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，避免过度社交",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ENTP": {
+                    physical: [
+                        "可能因过度辩论和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因冒险行为导致意外受伤"
+                    ],
+                    mental: [
+                        "可能过度批判自己和他人",
+                        "可能因无法挑战传统感到焦虑",
+                        "可能因过度思考导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ENFJ": {
+                    physical: [
+                        "可能因过度照顾他人导致身体疲劳",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因压力导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因无法帮助他人感到焦虑",
+                        "可能因过度工作导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ENTJ": {
+                    physical: [
+                        "可能因过度工作和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因久坐不动导致背部和颈部问题"
+                    ],
+                    mental: [
+                        "可能过度批判自己和他人",
+                        "可能因无法控制局面感到焦虑",
+                        "可能因过度工作导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "练习正念和放松技巧，如冥想和深呼吸",
+                        "学习授权和信任他人"
+                    ]
+                },
+                "ESFP": {
+                    physical: [
+                        "可能因过度活跃导致身体疲劳",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因情绪波动导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度关注他人评价",
+                        "可能因无法表达自己感到沮丧",
+                        "可能因过度社交导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，避免过度社交",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ESTP": {
+                    physical: [
+                        "可能因过度冒险导致意外受伤",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因过度工作导致身体疲劳"
+                    ],
+                    mental: [
+                        "可能过度忽视情感需求",
+                        "可能因无法解决问题感到焦虑",
+                        "可能因无聊导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，避免过度冒险",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ESFJ": {
+                    physical: [
+                        "可能因过度照顾他人导致身体疲劳",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因压力导致消化系统问题"
+                    ],
+                    mental: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因无法满足他人期望感到焦虑",
+                        "可能因过度社交导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的边界，优先照顾自己",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "保持规律的作息和健康的饮食",
+                        "练习正念和放松技巧，如冥想和深呼吸"
+                    ]
+                },
+                "ESTJ": {
+                    physical: [
+                        "可能因过度工作和压力导致头痛、肌肉紧张等症状",
+                        "可能忽视身体需求，如饮食和睡眠",
+                        "可能因久坐不动导致背部和颈部问题"
+                    ],
+                    mental: [
+                        "可能过度批判自己和他人",
+                        "可能因无法控制局面感到焦虑",
+                        "可能因变化导致精神疲劳"
+                    ],
+                    strategies: [
+                        "学习设定健康的工作和休息平衡",
+                        "通过身体活动释放压力，如跑步和游泳",
+                        "练习正念和放松技巧，如冥想和深呼吸",
+                        "学习接受变化和不确定性"
+                    ]
+                }
+            };
+            
+            return patterns[type] || patterns['INFP'];
+        }
+        
+        // Get hobbies based on MBTI type
+        function getHobbies(type) {
+            const hobbies = {
+                "INFP": [
+                    { category: "艺术创作", examples: ["写作", "绘画", "音乐创作", "摄影"] },
+                    { category: "自我探索", examples: ["冥想", "瑜伽", "日记", "哲学阅读"] },
+                    { category: "自然与户外", examples: ["徒步旅行", "露营", "园艺", "观鸟"] },
+                    { category: "人文与社会", examples: ["志愿服务", "社区工作", "历史研究", "文化探索"] }
+                ],
+                "INTJ": [
+                    { category: "战略游戏", examples: ["国际象棋", "围棋", "战略视频游戏", "解谜游戏"] },
+                    { category: "知识探索", examples: ["阅读", "研究", "学习新技能", "参加讲座"] },
+                    { category: "创意项目", examples: ["设计", "编程", "发明", "写作"] },
+                    { category: "身体活动", examples: ["跑步", "游泳", "武术", "登山"] }
+                ],
+                "INFJ": [
+                    { category: "创意表达", examples: ["写作", "绘画", "音乐", "摄影"] },
+                    { category: "深度交流", examples: ["哲学讨论", "心理咨询", "小组分享", "读书会"] },
+                    { category: "精神探索", examples: ["冥想", "瑜伽", "宗教研究", "灵修"] },
+                    { category: "社会服务", examples: ["志愿服务", "社区工作", "教育", "咨询"] }
+                ],
+                "INTP": [
+                    { category: "智力挑战", examples: ["解谜游戏", "编程", "数学问题", "科学实验"] },
+                    { category: "知识探索", examples: ["阅读", "研究", "学习新技能", "参加讲座"] },
+                    { category: "创意项目", examples: ["设计", "发明", "写作", "音乐制作"] },
+                    { category: "休闲活动", examples: ["散步", "听音乐", "玩游戏", "观察自然"] }
+                ],
+                "ISFP": [
+                    { category: "艺术创作", examples: ["绘画", "雕塑", "摄影", "手工艺"] },
+                    { category: "感官体验", examples: ["烹饪", "品酒", "园艺", "按摩"] },
+                    { category: "身体活动", examples: ["舞蹈", "瑜伽", "徒步旅行", "冲浪"] },
+                    { category: "休闲活动", examples: ["听音乐", "看电影", "逛博物馆", "旅行"] }
+                ],
+                "ISTP": [
+                    { category: "技术项目", examples: ["修理", "改装", "编程", "电子工程"] },
+                    { category: "户外冒险", examples: ["登山", "露营", "钓鱼", "极限运动"] },
+                    { category: "策略游戏", examples: ["国际象棋", "扑克", "战略视频游戏", "解谜游戏"] },
+                    { category: "实用技能", examples: ["烹饪", "木工", "机械维修", "驾驶"] }
+                ],
+                "ISFJ": [
+                    { category: "服务他人", examples: ["志愿服务", "照顾他人", "社区工作", "教育"] },
+                    { category: "传统手工艺", examples: ["缝纫", "编织", "烘焙", "园艺"] },
+                    { category: "家庭活动", examples: ["家庭聚餐", "家庭旅行", "家谱研究", "家庭装饰"] },
+                    { category: "文化活动", examples: ["阅读", "听音乐", "看电影", "参加宗教活动"] }
+                ],
+                "ISTJ": [
+                    { category: "实用项目", examples: ["修理", "组织", "计划", "财务管理"] },
+                    { category: "传统活动", examples: ["园艺", "烹饪", "手工艺", "家谱研究"] },
+                    { category: "身体活动", examples: ["跑步", "游泳", "徒步旅行", "团队运动"] },
+                    { category: "休闲活动", examples: ["阅读", "听音乐", "看电影", "玩游戏"] }
+                ],
+                "ENFP": [
+                    { category: "创意表达", examples: ["写作", "表演", "音乐", "绘画"] },
+                    { category: "社交活动", examples: ["聚会", "组织活动", "辩论", "参加俱乐部"] },
+                    { category: "冒险体验", examples: ["旅行", "尝试新事物", "极限运动", "探险"] },
+                    { category: "学习活动", examples: ["参加课程", "研讨会", "工作坊", "语言学习"] }
+                ],
+                "ENTP": [
+                    { category: "智力挑战", examples: ["辩论", "解谜游戏", "编程", "科学实验"] },
+                    { category: "创意项目", examples: ["设计", "发明", "写作", "创业"] },
+                    { category: "社交活动", examples: ["聚会", "组织活动", "演讲", "参加俱乐部"] },
+                    { category: "冒险体验", examples: ["旅行", "尝试新事物", "极限运动", "探险"] }
+                ],
+                "ENFJ": [
+                    { category: "社交活动", examples: ["聚会", "组织活动", "演讲", "参加俱乐部"] },
+                    { category: "服务他人", examples: ["志愿服务", "社区工作", "教育", "咨询"] },
+                    { category: "创意表达", examples: ["写作", "表演", "音乐", "绘画"] },
+                    { category: "学习活动", examples: ["参加课程", "研讨会", "工作坊", "语言学习"] }
+                ],
+                "ENTJ": [
+                    { category: "领导活动", examples: ["组织活动", "管理项目", "领导团队", "创业"] },
+                    { category: "战略游戏", examples: ["国际象棋", "围棋", "战略视频游戏", "模拟经营游戏"] },
+                    { category: "知识探索", examples: ["阅读", "研究", "学习新技能", "参加讲座"] },
+                    { category: "身体活动", examples: ["跑步", "游泳", "武术", "团队运动"] }
+                ],
+                "ESFP": [
+                    { category: "表演艺术", examples: ["舞蹈", "歌唱", "戏剧", "喜剧"] },
+                    { category: "社交活动", examples: ["聚会", "组织活动", "参加俱乐部", "社交游戏"] },
+                    { category: "感官体验", examples: ["烹饪", "品酒", "购物", "按摩"] },
+                    { category: "身体活动", examples: ["舞蹈", "瑜伽", "徒步旅行", "团队运动"] }
+                ],
+                "ESTP": [
+                    { category: "冒险活动", examples: ["极限运动", "赛车", "狩猎", "探险"] },
+                    { category: "社交活动", examples: ["聚会", "组织活动", "参加俱乐部", "社交游戏"] },
+                    { category: "实用项目", examples: ["修理", "改装", "烹饪", "机械维修"] },
+                    { category: "身体活动", examples: ["跑步", "游泳", "武术", "团队运动"] }
+                ],
+                "ESFJ": [
+                    { category: "社交活动", examples: ["聚会", "组织活动", "参加俱乐部", "社交游戏"] },
+                    { category: "服务他人", examples: ["志愿服务", "照顾他人", "社区工作", "教育"] },
+                    { category: "传统活动", examples: ["园艺", "烹饪", "手工艺", "家庭活动"] },
+                    { category: "文化活动", examples: ["阅读", "听音乐", "看电影", "参加宗教活动"] }
+                ],
+                "ESTJ": [
+                    { category: "领导活动", examples: ["组织活动", "管理项目", "领导团队", "志愿服务"] },
+                    { category: "实用项目", examples: ["修理", "组织", "计划", "财务管理"] },
+                    { category: "传统活动", examples: ["园艺", "烹饪", "手工艺", "家谱研究"] },
+                    { category: "身体活动", examples: ["跑步", "游泳", "徒步旅行", "团队运动"] }
+                ]
+            };
+            
+            return hobbies[type] || hobbies['INFP'];
+        }
+        
+        // Get communication styles based on MBTI type
+        function getCommunicationStyles(type) {
+            const styles = {
+                "INFP": {
+                    strengths: [
+                        "善于倾听和理解他人",
+                        "表达富有同理心和深度",
+                        "善于用比喻和故事表达复杂概念",
+                        "沟通风格温和而真诚"
+                    ],
+                    challenges: [
+                        "可能过度关注情感，忽视事实",
+                        "可能因害怕冲突而避免表达真实想法",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得情绪化或退缩"
+                    ],
+                    strategies: [
+                        "学习直接表达自己的需求和想法",
+                        "练习在表达情感的同时也关注事实",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习建设性地处理冲突和批评"
+                    ]
+                },
+                "INTJ": {
+                    strengths: [
+                        "表达清晰而直接",
+                        "善于分析和解决复杂问题",
+                        "沟通风格理性而客观",
+                        "善于提出创新的想法和解决方案"
+                    ],
+                    challenges: [
+                        "可能过度关注逻辑，忽视情感",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得批判或固执"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "INFJ": {
+                    strengths: [
+                        "善于倾听和理解他人",
+                        "表达富有洞察力和深度",
+                        "善于用比喻和故事表达复杂概念",
+                        "沟通风格温和而有说服力"
+                    ],
+                    challenges: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因害怕冲突而避免表达真实想法",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得情绪化或退缩"
+                    ],
+                    strategies: [
+                        "学习直接表达自己的需求和想法",
+                        "练习在关注他人的同时也关注自己",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习建设性地处理冲突和批评"
+                    ]
+                },
+                "INTP": {
+                    strengths: [
+                        "表达清晰而精确",
+                        "善于分析和解决复杂问题",
+                        "沟通风格理性而客观",
+                        "善于提出创新的想法和解决方案"
+                    ],
+                    challenges: [
+                        "可能过度关注逻辑，忽视情感",
+                        "可能因过于抽象而难以被理解",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得批判或退缩"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习使用更具体和生动的语言",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ISFP": {
+                    strengths: [
+                        "表达富有情感和真诚",
+                        "善于通过行动和艺术表达自己",
+                        "沟通风格温和而具体",
+                        "善于关注细节和当下体验"
+                    ],
+                    challenges: [
+                        "可能过度关注细节，忽视大局",
+                        "可能因害怕冲突而避免表达真实想法",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得情绪化或退缩"
+                    ],
+                    strategies: [
+                        "学习直接表达自己的需求和想法",
+                        "练习在关注细节的同时也关注大局",
+                        "使用比喻和故事表达抽象概念",
+                        "学习建设性地处理冲突和批评"
+                    ]
+                },
+                "ISTP": {
+                    strengths: [
+                        "表达清晰而直接",
+                        "善于分析和解决实际问题",
+                        "沟通风格理性而实用",
+                        "善于通过行动表达自己"
+                    ],
+                    challenges: [
+                        "可能过度关注事实，忽视情感",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得批判或退缩"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用比喻和故事表达抽象概念",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ISFJ": {
+                    strengths: [
+                        "表达富有情感和关怀",
+                        "善于关注细节和他人需求",
+                        "沟通风格温和而具体",
+                        "善于通过行动表达自己"
+                    ],
+                    challenges: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因害怕冲突而避免表达真实想法",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得情绪化或退缩"
+                    ],
+                    strategies: [
+                        "学习直接表达自己的需求和想法",
+                        "练习在关注他人的同时也关注自己",
+                        "使用比喻和故事表达抽象概念",
+                        "学习建设性地处理冲突和批评"
+                    ]
+                },
+                "ISTJ": {
+                    strengths: [
+                        "表达清晰而精确",
+                        "善于关注细节和事实",
+                        "沟通风格理性而实用",
+                        "善于通过行动表达自己"
+                    ],
+                    challenges: [
+                        "可能过度关注事实，忽视情感",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得批判或固执"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用比喻和故事表达抽象概念",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ENFP": {
+                    strengths: [
+                        "表达富有热情和创造力",
+                        "善于用比喻和故事表达复杂概念",
+                        "沟通风格活泼而有说服力",
+                        "善于激发他人的兴趣和热情"
+                    ],
+                    challenges: [
+                        "可能过度分散注意力，难以集中",
+                        "可能因过于情绪化而忽视事实",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得冲动或焦虑"
+                    ],
+                    strategies: [
+                        "学习专注于一个主题，避免过度分散",
+                        "练习在表达情感的同时也关注事实",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ENTP": {
+                    strengths: [
+                        "表达富有逻辑性和说服力",
+                        "善于辩论和挑战传统观念",
+                        "沟通风格活泼而有洞察力",
+                        "善于提出创新的想法和解决方案"
+                    ],
+                    challenges: [
+                        "可能过度关注辩论，忽视合作",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得批判或固执"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ENFJ": {
+                    strengths: [
+                        "表达富有热情和说服力",
+                        "善于理解和激发他人",
+                        "沟通风格温和而有洞察力",
+                        "善于用比喻和故事表达复杂概念"
+                    ],
+                    challenges: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因过于情绪化而忽视事实",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得焦虑或自我怀疑"
+                    ],
+                    strategies: [
+                        "学习直接表达自己的需求和想法",
+                        "练习在关注他人的同时也关注自己",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习接受批评和反馈"
+                    ]
+                },
+                "ENTJ": {
+                    strengths: [
+                        "表达清晰而直接",
+                        "善于分析和解决复杂问题",
+                        "沟通风格理性而有说服力",
+                        "善于提出创新的想法和解决方案"
+                    ],
+                    challenges: [
+                        "可能过度关注控制，忽视合作",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达具体细节和实际需求",
+                        "可能在压力下变得批判或固执"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用具体例子和细节支持自己的观点",
+                        "学习授权和信任他人"
+                    ]
+                },
+                "ESFP": {
+                    strengths: [
+                        "表达富有热情和活力",
+                        "善于通过行动和表演表达自己",
+                        "沟通风格活泼而具体",
+                        "善于关注细节和当下体验"
+                    ],
+                    challenges: [
+                        "可能过度关注当下，忽视长远",
+                        "可能因过于情绪化而忽视事实",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得冲动或焦虑"
+                    ],
+                    strategies: [
+                        "学习在关注当下的同时也关注长远",
+                        "练习在表达情感的同时也关注事实",
+                        "使用比喻和故事表达抽象概念",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ESTP": {
+                    strengths: [
+                        "表达清晰而直接",
+                        "善于分析和解决实际问题",
+                        "沟通风格理性而实用",
+                        "善于通过行动表达自己"
+                    ],
+                    challenges: [
+                        "可能过度关注事实，忽视情感",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得冲动或批判"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用比喻和故事表达抽象概念",
+                        "学习倾听他人的意见和建议"
+                    ]
+                },
+                "ESFJ": {
+                    strengths: [
+                        "表达富有情感和关怀",
+                        "善于关注细节和他人需求",
+                        "沟通风格温和而具体",
+                        "善于通过行动表达自己"
+                    ],
+                    challenges: [
+                        "可能过度关注他人需求，忽视自身",
+                        "可能因过于情绪化而忽视事实",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得焦虑或自我怀疑"
+                    ],
+                    strategies: [
+                        "学习直接表达自己的需求和想法",
+                        "练习在关注他人的同时也关注自己",
+                        "使用比喻和故事表达抽象概念",
+                        "学习接受批评和反馈"
+                    ]
+                },
+                "ESTJ": {
+                    strengths: [
+                        "表达清晰而直接",
+                        "善于关注细节和事实",
+                        "沟通风格理性而实用",
+                        "善于通过行动表达自己"
+                    ],
+                    challenges: [
+                        "可能过度关注控制，忽视合作",
+                        "可能因过于直接而伤害他人感情",
+                        "可能难以表达抽象概念和理论",
+                        "可能在压力下变得批判或固执"
+                    ],
+                    strategies: [
+                        "学习关注他人的情感需求和反应",
+                        "练习在表达观点时更加温和和委婉",
+                        "使用比喻和故事表达抽象概念",
+                        "学习倾听他人的意见和建议"
+                    ]
+                }
+            };
+            
+            return styles[type] || styles['INFP'];
+        }
+        
+        // Get career information based on MBTI type
+        function getCareerInfo(type) {
+            const careerInfo = {
+                "INFP": ["作家、艺术家、心理咨询师、编辑、人力资源专员", "寻找能够发挥创造力和帮助他人的工作环境，避免过于结构化和重复性的工作。"],
+                "INTJ": ["战略顾问、科学家、工程师、项目经理、企业家", "寻找能够发挥战略思维和创新能力的工作环境，避免过于琐碎和重复性的工作。"],
+                "INFJ": ["心理咨询师、教师、作家、人力资源管理、社会工作者", "寻找能够帮助他人成长和发展的工作环境，避免过于竞争和冲突的工作。"],
+                "INTP": ["科学家、工程师、程序员、分析师、学者", "寻找能够发挥分析能力和创造力的工作环境，避免过于结构化和社交密集的工作。"],
+                "ISFP": ["艺术家、设计师、厨师、护士、社会工作者", "寻找能够发挥创造力和帮助他人的工作环境，避免过于理论化和抽象的工作。"],
+                "ISTP": ["工程师、技术员、运动员、侦探、手工艺人", "寻找能够解决实际问题和动手操作的工作环境，避免过于官僚和结构化的工作。"],
+                "ISFJ": ["护士、教师、图书管理员、行政助理、人力资源专员", "寻找能够帮助他人和维护秩序的工作环境，避免过于混乱和不可预测的工作。"],
+                "ISTJ": ["会计、审计师、管理员、警察、军人", "寻找能够维护秩序和稳定的工作环境，避免过于创新和变化的工作。"],
+                "ENFP": ["市场营销、公关、培训师、演员、记者", "寻找能够发挥创造力和沟通能力的工作环境，避免过于结构化和重复性的工作。"],
+                "ENTP": ["企业家、律师、顾问、记者、发明家", "寻找能够挑战思维和创新的工作环境，避免过于常规和琐碎的工作。"],
+                "ENFJ": ["教师、心理咨询师、人力资源管理、公关、社会工作者", "寻找能够帮助他人成长和发展的工作环境，避免过于竞争和冲突的工作。"],
+                "ENTJ": ["总经理、CEO、项目经理、律师、政治家", "寻找能够发挥领导能力和战略思维的工作环境，避免过于被动和缺乏挑战的工作。"],
+                "ESFP": ["演员、主持人、销售、公关、旅游顾问", "寻找能够与人互动和创造欢乐的工作环境，避免过于孤独和理论化的工作。"],
+                "ESTP": ["企业家、销售、运动员、警察、消防员", "寻找能够应对挑战和变化的工作环境，避免过于结构化和久坐的工作。"],
+                "ESFJ": ["教师、护士、人力资源管理、公关、行政助理", "寻找能够帮助他人和维护和谐的工作环境，避免过于竞争和冲突的工作。"],
+                "ESTJ": ["总经理、行政主管、警察、军人、会计", "寻找能够维护秩序和管理他人的工作环境，避免过于创新和变化的工作。"]
+            };
+            
+            return careerInfo[type] || careerInfo['INFP'];
+        }
+        
+        // Update Type Comparison Analysis
+        function updateTypeComparison(mainType, compareType) {
+            const comparisonContainer = document.getElementById('type-comparison');
+            const comparisonText = comparisonContainer.querySelector('p');
+            
+            // Get compatibility score
+            const compatibilityInfo = compatibilityData[mainType] || compatibilityData['INFP'];
+            const compatibilityScore = compatibilityInfo.compatibilityScores[compareType] || 50;
+            
+            // Get type details
+            const mainTypeData = mbtiTypes[mainType] || mbtiTypes['INFP'];
+            const compareTypeData = mbtiTypes[compareType] || mbtiTypes['INFP'];
+            
+            // Generate comparison analysis based on compatibility score
+            let analysis = '';
+            
+            if (compatibilityScore >= 90) {
+                analysis = `${mainType}（${mainTypeData.name}）和${compareType}（${compareTypeData.name}）是高度匹配的类型组合，匹配度达到${compatibilityScore}%。你们在核心价值观和思维方式上有很强的共鸣，能够理解并欣赏彼此的独特之处。这种组合通常能够形成深度的情感连接和精神共鸣，在沟通和决策上能够自然地互补。`;
+            } else if (compatibilityScore >= 75) {
+                analysis = `${mainType}（${mainTypeData.name}）和${compareType}（${compareTypeData.name}）是较为匹配的类型组合，匹配度为${compatibilityScore}%。你们在许多方面有相似之处，同时也存在一些互补的差异。这种组合通常能够形成良好的沟通和合作关系，通过相互理解和尊重差异，可以建立稳定而有活力的关系。`;
+            } else if (compatibilityScore >= 60) {
+                analysis = `${mainType}（${mainTypeData.name}）和${compareType}（${compareTypeData.name}）的匹配度为${compatibilityScore}%。你们在某些方面有相似之处，但也存在一些需要磨合的差异。这种组合需要双方更多的理解和包容，通过学习对方的思维方式和行为习惯，可以建立平衡而有成长性的关系。`;
+            } else {
+                analysis = `${mainType}（${mainTypeData.name}）和${compareType}（${compareTypeData.name}）的匹配度为${compatibilityScore}%。你们在思维方式和行为习惯上存在显著差异，可能需要更多的努力来理解和适应彼此。这种组合虽然充满挑战，但通过有意识的沟通和相互尊重，也可以建立富有张力和成长性的关系，帮助彼此拓展视野和能力。`;
+            }
+            
+            // Add dimension-based analysis
+            const dimensions = [
+                { letter: 0, name: '能量来源', trait: ['外向', '内向'] },
+                { letter: 1, name: '信息获取', trait: ['感觉', '直觉'] },
+                { letter: 2, name: '决策方式', trait: ['思考', '情感'] },
+                { letter: 3, name: '生活方式', trait: ['判断', '知觉'] }
+            ];
+            
+            const sameDimensions = [];
+            const differentDimensions = [];
+            
+            for (const dim of dimensions) {
+                if (mainType[dim.letter] === compareType[dim.letter]) {
+                    sameDimensions.push(dim.name);
+                } else {
+                    differentDimensions.push(dim.name);
+                }
+            }
+            
+            if (sameDimensions.length > 0) {
+                analysis += ` 你们在${sameDimensions.join('、')}等方面有相似的倾向，这有助于你们在这些领域形成共识和默契。`;
+            }
+            
+            if (differentDimensions.length > 0) {
+                analysis += ` 你们在${differentDimensions.join('、')}等方面存在差异，这些差异可以成为互补的优势，也可能是需要沟通和理解的关键点。`;
+            }
+            
+            // Update comparison text
+            comparisonText.textContent = analysis;
+        }
+        
+        // Get growth tips based on MBTI type
+        function getGrowthTips(type) {
+            const growthTips = {
+                "INFP": [
+                    "发展实际技能，平衡理想与现实",
+                    "学会设定边界，避免过度牺牲自己",
+                    "增强执行力，将想法转化为行动",
+                    "接受批评和反馈，视为成长机会"
+                ],
+                "INTJ": [
+                    "学会倾听他人的意见和建议",
+                    "发展情感智能，增强人际关系",
+                    "避免过度完美主义，接受不完美",
+                    "学会放松和享受当下"
+                ],
+                "INFJ": [
+                    "学会照顾自己的需求，避免过度付出",
+                    "增强 assertiveness，表达自己的想法",
+                    "接受批评和反馈，不要过于敏感",
+                    "发展实际技能，平衡理想与现实"
+                ],
+                "INTP": [
+                    "增强执行力，将想法转化为行动",
+                    "发展社交技能，增强人际关系",
+                    "学会设定目标和优先级",
+                    "接受情感和直觉，不要过于理性"
+                ],
+                "ISFP": [
+                    "增强自信心，表达自己的想法",
+                    "发展长期规划能力，设定目标",
+                    "学会处理冲突和压力",
+                    "增强理论知识，平衡实践能力"
+                ],
+                "ISTP": [
+                    "增强沟通能力，表达自己的想法",
+                    "发展团队合作能力，学会与他人协作",
+                    "学会设定目标和优先级",
+                    "接受情感和直觉，不要过于理性"
+                ],
+                "ISFJ": [
+                    "学会照顾自己的需求，避免过度付出",
+                    "增强 assertiveness，表达自己的想法",
+                    "接受变化和不确定性",
+                    "发展创新思维，不要过于传统"
+                ],
+                "ISTJ": [
+                    "接受变化和不确定性",
+                    "发展创新思维，不要过于传统",
+                    "学会灵活应对，不要过于固执",
+                    "增强情感表达，发展人际关系"
+                ],
+                "ENFP": [
+                    "增强专注力，完成已开始的项目",
+                    "发展实际技能，平衡创造力",
+                    "学会设定边界，避免过度承诺",
+                    "增强自我 discipline，提高执行力"
+                ],
+                "ENTP": [
+                    "增强专注力，完成已开始的项目",
+                    "学会倾听他人的意见和建议",
+                    "发展情感智能，增强人际关系",
+                    "学会跟进细节，不要过于宏观"
+                ],
+                "ENFJ": [
+                    "学会照顾自己的需求，避免过度付出",
+                    "接受批评和反馈，不要过于敏感",
+                    "学会设定边界，避免过度承诺",
+                    "发展理性思维，平衡情感决策"
+                ],
+                "ENTJ": [
+                    "学会倾听他人的意见和建议",
+                    "发展情感智能，增强人际关系",
+                    "学会授权，不要过于控制",
+                    "接受不完美，避免过度完美主义"
+                ],
+                "ESFP": [
+                    "发展长期规划能力，设定目标",
+                    "增强专注力，完成已开始的项目",
+                    "学会延迟满足，不要过于冲动",
+                    "发展理论知识，平衡实践能力"
+                ],
+                "ESTP": [
+                    "发展长期规划能力，设定目标",
+                    "学会考虑他人的感受和需求",
+                    "增强耐心，不要过于冲动",
+                    "发展理论知识，平衡实践能力"
+                ],
+                "ESFJ": [
+                    "学会照顾自己的需求，避免过度付出",
+                    "增强 assertiveness，表达自己的想法",
+                    "接受批评和反馈，不要过于敏感",
+                    "发展理性思维，平衡情感决策"
+                ],
+                "ESTJ": [
+                    "接受变化和不确定性",
+                    "发展创新思维，不要过于传统",
+                    "学会灵活应对，不要过于固执",
+                    "增强情感表达，发展人际关系"
+                ]
+            };
+            
+            return growthTips[type] || growthTips['INFP'];
+        }
+        
+        // MBTI Type Compatibility Data
+        const compatibilityData = {
+            "INFP": {
+                bestMatches: ["ENFJ", "ENTP", "INFJ", "INTJ"],
+                compatibilityScores: {
+                    "INFP": 100, "ENFJ": 95, "ENTP": 90, "INFJ": 85, "INTJ": 80,
+                    "ENFP": 75, "ENTJ": 70, "INTP": 70, "ISFP": 65, "ISTP": 60,
+                    "ESFJ": 55, "ESTP": 55, "ISFJ": 50, "ISTJ": 50, "ESFP": 45, "ESTJ": 40
+                },
+                analysis: "INFP最适合与ENFJ（教育家）和ENTP（辩论家）建立关系。ENFJ的外向情感与INFP的内向情感形成深度情感共鸣，两者都重视人际关系的内在价值。ENFJ擅长主动关怀他人需求，能激发INFP的情感表达；INFP的理想主义为ENFJ提供精神支持。与ENTP的搭配则体现了直觉型思维的互补，ENTP的创新思维与INFP的理想主义能产生独特的化学反应。"
+            },
+            "INTJ": {
+                bestMatches: ["ENFP", "ENTP", "INFJ", "INTP"],
+                compatibilityScores: {
+                    "INTJ": 100, "ENFP": 95, "ENTP": 90, "INFJ": 85, "INTP": 80,
+                    "ENTJ": 75, "ENFJ": 70, "INFP": 70, "ISTP": 65, "ISFP": 60,
+                    "ESTP": 55, "ESFP": 55, "ISTJ": 50, "ISFJ": 50, "ESTJ": 45, "ESFJ": 40
+                },
+                analysis: "INTJ最适合与ENFP（活动家）和ENTP（辩论家）建立关系。这体现了内向直觉(Ni)与外向直觉(Ne)的相互吸引。脑科学研究表明，当这两种思维模式结合时，可以激活大脑中负责创造力的区域，产生独特的化学反应。INTJ被ENFP的想象力和热情所吸引，而ENFP则欣赏INTJ的深度和洞察力。与ENTP的搭配则形成了绝妙的思维互补，能够进行高密度思想交流。"
+            },
+            "INFJ": {
+                bestMatches: ["ENFP", "ENTP", "INFP", "INTJ"],
+                compatibilityScores: {
+                    "INFJ": 100, "ENFP": 95, "ENTP": 90, "INFP": 85, "INTJ": 80,
+                    "ENFJ": 75, "ENTJ": 70, "INTP": 70, "ISFJ": 65, "ISTJ": 60,
+                    "ESFP": 55, "ESTP": 55, "ISFP": 50, "ISTP": 50, "ESFJ": 45, "ESTJ": 40
+                },
+                analysis: "INFJ最适合与ENFP（活动家）和ENTP（辩论家）建立关系。INFJ的洞察力与ENFP的热情形成了理想主义的完美结合，两者都重视深层的情感连接和精神共鸣。与ENTP的搭配则体现了辅助功能与第三功能交叉对应的原则，INFJ的直觉与思考功能与ENTP的直觉与情感功能形成了互补，能够激发彼此的创造力和思维深度。"
+            },
+            "INTP": {
+                bestMatches: ["ENTJ", "ENFJ", "INTJ", "INFJ"],
+                compatibilityScores: {
+                    "INTP": 100, "ENTJ": 95, "ENFJ": 90, "INTJ": 85, "INFJ": 80,
+                    "ENTP": 75, "ENFP": 70, "INFP": 70, "ISTP": 65, "ISFP": 60,
+                    "ESTJ": 55, "ESFJ": 55, "ISTJ": 50, "ISFJ": 50, "ESTP": 45, "ESFP": 40
+                },
+                analysis: "INTP最适合与ENTJ（指挥官）和ENFJ（教育家）建立关系。当INTP与ENTJ相处时，看起来像在不断辩论，但这恰是他们交流的方式。INTP的内向思考(Ti)与ENTJ的外向思考(Te)形成了思维方式上的互补。神经科学研究表明，当不同思维模式相遇时，会激活大脑的新连接，促进相互成长。与ENFJ的搭配则体现了情感与思考的平衡，ENFJ的热情能够温暖INTP的理性世界。"
+            },
+            "ISFP": {
+                bestMatches: ["ESFJ", "ESTP", "ISFJ", "ISTP"],
+                compatibilityScores: {
+                    "ISFP": 100, "ESFJ": 95, "ESTP": 90, "ISFJ": 85, "ISTP": 80,
+                    "ENFP": 75, "ENTP": 70, "INFP": 70, "ESFP": 65, "ESTJ": 60,
+                    "INFJ": 55, "INTJ": 55, "ENFJ": 50, "ENTJ": 50, "INTP": 45, "ISTJ": 40
+                },
+                analysis: "ISFP最适合与ESFJ（执政官）和ESTP（企业家）建立关系。ISFP的温和友善与ESFJ的热情关怀形成了和谐的情感连接，两者都重视实际的帮助和支持。与ESTP的搭配则体现了感觉型的互补，ISFP的艺术气质与ESTP的行动力能够创造充满活力的生活方式。这种组合在艺术创作和户外活动中特别有优势。"
+            },
+            "ISTP": {
+                bestMatches: ["ESFJ", "ESTP", "ISFJ", "ISTJ"],
+                compatibilityScores: {
+                    "ISTP": 100, "ESFJ": 95, "ESTP": 90, "ISFJ": 85, "ISTJ": 80,
+                    "ENTP": 75, "ESTJ": 70, "INTP": 70, "ESFP": 65, "ENFP": 60,
+                    "INTJ": 55, "INFJ": 55, "ENTJ": 50, "ENFJ": 50, "INFP": 45, "ISFP": 40
+                },
+                analysis: "ISTP最适合与ESFJ（执政官）和ESTP（企业家）建立关系。ISTP的冷静客观与ESFJ的热情友善形成了功能互补，ESFJ的社交能力能够帮助ISTP拓展人际关系，而ISTP的解决问题能力则能为ESFJ提供实际支持。与ESTP的搭配则体现了感觉型的相似性，两者都擅长处理实际问题和把握当下机会，在户外活动和技术项目中能够默契配合。"
+            },
+            "ISFJ": {
+                bestMatches: ["ESFP", "ESTP", "ISFP", "ISTP"],
+                compatibilityScores: {
+                    "ISFJ": 100, "ESFP": 95, "ESTP": 90, "ISFP": 85, "ISTP": 80,
+                    "ENFJ": 75, "ESTJ": 70, "INFJ": 70, "ESFJ": 65, "ENFP": 60,
+                    "INTJ": 55, "ENTP": 55, "ISTJ": 50, "INTP": 50, "ENTJ": 45, "INFP": 40
+                },
+                analysis: "ISFJ最适合与ESFP（表演者）和ESTP（企业家）建立关系。ISFJ的忠诚可靠与ESFP的热情活泼形成了温暖的情感连接，ISFJ的细致关怀能够平衡ESFP的冲动倾向，而ESFP则能为ISFJ的生活带来新鲜感和乐趣。与ESTP的搭配则体现了判断型与知觉型的互补，ISFJ的组织能力能够为ESTP的行动提供支持，而ESTP则能帮助ISFJ突破舒适区。"
+            },
+            "ISTJ": {
+                bestMatches: ["ESFP", "ESTP", "ISFP", "ISTP"],
+                compatibilityScores: {
+                    "ISTJ": 100, "ESFP": 95, "ESTP": 90, "ISFP": 85, "ISTP": 80,
+                    "ESTJ": 75, "ENTJ": 70, "ISTJ": 70, "ISFJ": 65, "INTJ": 60,
+                    "ENFP": 55, "ENTP": 55, "ESFJ": 50, "INTP": 50, "ENFJ": 45, "INFJ": 40
+                },
+                analysis: "ISTJ最适合与ESFP（表演者）和ESTP（企业家）建立关系。ISTJ的严谨可靠与ESFP的热情活泼形成了有趣的对比，ISTJ的组织能力能够为ESFP的生活提供稳定框架，而ESFP则能为ISTJ的生活带来乐趣和惊喜。与ESTP的搭配则体现了判断型与知觉型的互补，ISTJ的规划能力能够帮助ESTP规避风险，而ESTP则能教会ISTJ偶尔放松和享受当下。"
+            },
+            "ENFP": {
+                bestMatches: ["INFJ", "INTJ", "ENFJ", "ENTJ"],
+                compatibilityScores: {
+                    "ENFP": 100, "INFJ": 95, "INTJ": 90, "ENFJ": 85, "ENTJ": 80,
+                    "INFP": 75, "ENTP": 70, "ENFP": 70, "INTP": 65, "ISFJ": 60,
+                    "ISTP": 55, "ESFJ": 55, "INFJ": 50, "ISTJ": 50, "ESTP": 45, "ESTJ": 40
+                },
+                analysis: "ENFP最适合与INFJ（提倡者）和INTJ（建筑师）建立关系。ENFP的热情洋溢与INFJ的深刻洞察形成了理想主义的完美结合，两者都重视深层的情感连接和精神共鸣。与INTJ的搭配则体现了外向直觉(Ne)与内向直觉(Ni)的相互吸引，ENFP的想象力能够激发INTJ的战略思维，而INTJ的深度则能为ENFP提供方向感。"
+            },
+            "ENTP": {
+                bestMatches: ["INFJ", "INTJ", "ENFJ", "ENTJ"],
+                compatibilityScores: {
+                    "ENTP": 100, "INFJ": 95, "INTJ": 90, "ENFJ": 85, "ENTJ": 80,
+                    "ENFP": 75, "INTP": 70, "ENTP": 70, "ESTP": 65, "INFP": 60,
+                    "ISFJ": 55, "ISTP": 55, "ESFJ": 50, "ISTJ": 50, "ESTJ": 45, "ISFP": 40
+                },
+                analysis: "ENTP最适合与INFJ（提倡者）和INTJ（建筑师）建立关系。ENTP的创新思维与INFJ的洞察力形成了智力与情感的完美结合，两者都喜欢探索新的想法和可能性。与INTJ的搭配则体现了外向直觉(Ne)与内向直觉(Ni)的互补，能够进行高密度思想交流，在创业和科研等领域特别有优势。"
+            },
+            "ENFJ": {
+                bestMatches: ["INFP", "INTP", "ENFP", "ENTP"],
+                compatibilityScores: {
+                    "ENFJ": 100, "INFP": 95, "INTP": 90, "ENFP": 85, "ENTP": 80,
+                    "INFJ": 75, "ENFJ": 70, "ENTJ": 70, "ISFJ": 65, "INFJ": 60,
+                    "ISTP": 55, "ESFJ": 55, "INTJ": 50, "INTP": 50, "ESTP": 45, "ESTJ": 40
+                },
+                analysis: "ENFJ最适合与INFP（调停者）和INTP（逻辑学家）建立关系。ENFJ的外向情感与INFP的内向情感形成深度情感共鸣，两者都重视人际关系的内在价值。ENFJ擅长主动关怀他人需求，能激发INFP的情感表达；INFP的理想主义为ENFJ提供精神支持。与INTP的搭配则体现了情感与思考的平衡，ENFJ的热情能够温暖INTP的理性世界，而INTP的分析能力则能帮助ENFJ更客观地看待问题。"
+            },
+            "ENTJ": {
+                bestMatches: ["INFP", "INTP", "ENFP", "ENTP"],
+                compatibilityScores: {
+                    "ENTJ": 100, "INFP": 95, "INTP": 90, "ENFP": 85, "ENTP": 80,
+                    "INTJ": 75, "ENTJ": 70, "ESTJ": 70, "ISTP": 65, "INFJ": 60,
+                    "ISFJ": 55, "ESTP": 55, "ISTJ": 50, "INTP": 50, "ESFJ": 45, "ISFP": 40
+                },
+                analysis: "ENTJ最适合与INFP（调停者）和INTP（逻辑学家）建立关系。ENTJ的果断坚决与INFP的理想主义形成了有趣的对比，ENTJ的执行力能够帮助INFP实现梦想，而INFP的价值观则能提醒ENTJ关注人性和情感。与INTP的搭配则体现了思维方式的互补，ENTJ的外向思考(Te)与INTP的内向思考(Ti)能够形成强大的问题解决组合，在商业和科研领域特别有优势。"
+            },
+            "ESFP": {
+                bestMatches: ["ISFJ", "ISTJ", "ESFJ", "ESTJ"],
+                compatibilityScores: {
+                    "ESFP": 100, "ISFJ": 95, "ISTJ": 90, "ESFJ": 85, "ESTJ": 80,
+                    "ENFP": 75, "ESTP": 70, "ESFP": 70, "ISFP": 65, "ENFJ": 60,
+                    "INFJ": 55, "ENTP": 55, "ISTP": 50, "INFP": 50, "INTJ": 45, "INTP": 40
+                },
+                analysis: "ESFP最适合与ISFJ（守卫者）和ISTJ（物流师）建立关系。ESFP的热情活泼与ISFJ的忠诚可靠形成了温暖的情感连接，ISFJ的细致关怀能够为ESFP提供稳定感，而ESFP则能为ISFJ的生活带来乐趣和惊喜。与ISTJ的搭配则体现了知觉型与判断型的互补，ISTJ的组织能力能够为ESFP的生活提供框架，而ESFP则能教会ISTJ放松和享受当下。"
+            },
+            "ESTP": {
+                bestMatches: ["ISFJ", "ISTJ", "ESFJ", "ESTJ"],
+                compatibilityScores: {
+                    "ESTP": 100, "ISFJ": 95, "ISTJ": 90, "ESFJ": 85, "ESTJ": 80,
+                    "ENTP": 75, "ESTP": 70, "ISTP": 70, "ESFP": 65, "ENTJ": 60,
+                    "INTP": 55, "ENFP": 55, "ISFP": 50, "INTJ": 50, "INFJ": 45, "INFP": 40
+                },
+                analysis: "ESTP最适合与ISFJ（守卫者）和ISTJ（物流师）建立关系。ESTP的大胆果断与ISFJ的温柔关怀形成了有趣的对比，ISFJ的细致能够帮助ESTP避免冲动决策，而ESTP则能帮助ISFJ突破舒适区。与ISTJ的搭配则体现了知觉型与判断型的互补，ISTJ的规划能力能够帮助ESTP规避风险，而ESTP则能教会ISTJ偶尔冒险和尝试新事物。"
+            },
+            "ESFJ": {
+                bestMatches: ["ISFP", "ISTP", "ESFP", "ESTP"],
+                compatibilityScores: {
+                    "ESFJ": 100, "ISFP": 95, "ISTP": 90, "ESFP": 85, "ESTP": 80,
+                    "ENFJ": 75, "ESFJ": 70, "INFJ": 70, "ISFJ": 65, "ENFP": 60,
+                    "INTJ": 55, "ENTP": 55, "ISTJ": 50, "INTP": 50, "ENTJ": 45, "INFP": 40
+                },
+                analysis: "ESFJ最适合与ISFP（艺术家）和ISTP（手艺人）建立关系。ESFJ的热情友善与ISFP的温和细腻形成了温暖的情感连接，两者都重视和谐的人际关系和实际的帮助。与ISTP的搭配则体现了情感型与思考型的互补，ESFJ的社交能力能够帮助ISTP拓展人际关系，而ISTP的解决问题能力则能为ESFJ提供实际支持。"
+            },
+            "ESTJ": {
+                bestMatches: ["ISFP", "ISTP", "ESFP", "ESTP"],
+                compatibilityScores: {
+                    "ESTJ": 100, "ISFP": 95, "ISTP": 90, "ESFP": 85, "ESTP": 80,
+                    "ESTJ": 75, "ENTJ": 70, "ISTJ": 70, "ISFJ": 65, "INTJ": 60,
+                    "ENFP": 55, "ENTP": 55, "ESFJ": 50, "INTP": 50, "ENFJ": 45, "INFJ": 40
+                },
+                analysis: "ESTJ最适合与ISFP（艺术家）和ISTP（手艺人）建立关系。ESTJ的果断坚决与ISFP的温和细腻形成了有趣的对比，ESTJ的组织能力能够为ISFP的生活提供结构，而ISFP则能为ESTJ的生活带来艺术气息和情感深度。与ISTP的搭配则体现了判断型与知觉型的互补，ESTJ的规划能力能够帮助ISTP实现目标，而ISTP的灵活性则能帮助ESTJ适应变化。"
+            }
+        };
+        
+        // Career Chart Data for Different MBTI Types
+        const careerChartData = {
+            "INFP": {
+                label: "INFP适配度",
+                data: [90, 65, 60, 85, 70, 75],
+                color: "rgba(139, 92, 246, 1)"
+            },
+            "INTJ": {
+                label: "INTJ适配度",
+                data: [70, 95, 90, 60, 85, 75],
+                color: "rgba(59, 130, 246, 1)"
+            },
+            "INFJ": {
+                label: "INFJ适配度",
+                data: [85, 80, 75, 90, 70, 85],
+                color: "rgba(16, 185, 129, 1)"
+            },
+            "INTP": {
+                label: "INTP适配度",
+                data: [80, 95, 65, 60, 75, 90],
+                color: "rgba(245, 158, 11, 1)"
+            },
+            "ISFP": {
+                label: "ISFP适配度",
+                data: [95, 60, 65, 75, 85, 80],
+                color: "rgba(239, 68, 68, 1)"
+            },
+            "ISTP": {
+                label: "ISTP适配度",
+                data: [75, 85, 70, 65, 90, 95],
+                color: "rgba(139, 92, 246, 1)"
+            },
+            "ISFJ": {
+                label: "ISFJ适配度",
+                data: [70, 75, 80, 90, 95, 85],
+                color: "rgba(59, 130, 246, 1)"
+            },
+            "ISTJ": {
+                label: "ISTJ适配度",
+                data: [65, 80, 85, 75, 95, 80],
+                color: "rgba(16, 185, 129, 1)"
+            },
+            "ENFP": {
+                label: "ENFP适配度",
+                data: [95, 70, 85, 90, 75, 80],
+                color: "rgba(245, 158, 11, 1)"
+            },
+            "ENTP": {
+                label: "ENTP适配度",
+                data: [85, 90, 80, 75, 70, 95],
+                color: "rgba(239, 68, 68, 1)"
+            },
+            "ENFJ": {
+                label: "ENFJ适配度",
+                data: [80, 75, 90, 95, 85, 70],
+                color: "rgba(139, 92, 246, 1)"
+            },
+            "ENTJ": {
+                label: "ENTJ适配度",
+                data: [75, 85, 95, 80, 90, 75],
+                color: "rgba(59, 130, 246, 1)"
+            },
+            "ESFP": {
+                label: "ESFP适配度",
+                data: [90, 65, 75, 95, 80, 85],
+                color: "rgba(16, 185, 129, 1)"
+            },
+            "ESTP": {
+                label: "ESTP适配度",
+                data: [70, 80, 85, 75, 95, 90],
+                color: "rgba(245, 158, 11, 1)"
+            },
+            "ESFJ": {
+                label: "ESFJ适配度",
+                data: [75, 70, 80, 95, 85, 80],
+                color: "rgba(239, 68, 68, 1)"
+            },
+            "ESTJ": {
+                label: "ESTJ适配度",
+                data: [65, 75, 90, 80, 95, 70],
+                color: "rgba(139, 92, 246, 1)"
+            }
+        };
+        
+        // Initialize Compatibility Chart
+        function initCompatibilityChart(type = 'INFP') {
+            const ctx = document.getElementById('compatibility-chart').getContext('2d');
+            
+            // Get compatibility data for the given type or use INFP as default
+            const typeData = compatibilityData[type] || compatibilityData['INFP'];
+            
+            // Prepare data for the chart
+            const labels = Object.keys(typeData.compatibilityScores);
+            const scores = Object.values(typeData.compatibilityScores);
+            
+            // Create gradient for bars
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(139, 92, 246, 0.8)');
+            gradient.addColorStop(1, 'rgba(139, 92, 246, 0.2)');
+            
+            // Create chart
+            const compatibilityChart = new Chart(ctx, {
+                type: 'bar',
                 data: {
-                    labels: ['创意', '分析', '领导', '协作', '执行', '适应'],
+                    labels: labels,
                     datasets: [{
-                        label: 'INFP适配度',
-                        data: [90, 65, 60, 85, 70, 75],
-                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                        label: '匹配度',
+                        data: scores,
+                        backgroundColor: gradient,
                         borderColor: 'rgba(139, 92, 246, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(139, 92, 246, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(139, 92, 246, 1)'
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barPercentage: 0.6
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
-                        r: {
+                        y: {
                             beginAtZero: true,
                             max: 100,
                             ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
                                 display: false
                             }
                         }
@@ -1139,10 +4926,235 @@
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `匹配度: ${context.raw}%`;
+                                }
+                            }
                         }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
+            
+            return compatibilityChart;
+        }
+        
+        // Initialize Type Comparison Chart
+        function initComparisonChart(mainType = 'INFP', compareType = 'INFP') {
+            const ctx = document.getElementById('comparison-chart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (comparisonChart) {
+                comparisonChart.destroy();
+            }
+            
+            // Get career data for both types
+            const mainData = careerChartData[mainType] || careerChartData['INFP'];
+            const compareData = careerChartData[compareType] || careerChartData['INFP'];
+            
+            // Create gradients for radar charts
+            const mainGradient = ctx.createRadialGradient(
+                0, 0, 0,
+                0, 0, 150
+            );
+            mainGradient.addColorStop(0, 'rgba(139, 92, 246, 0.3)');
+            mainGradient.addColorStop(1, 'rgba(139, 92, 246, 0.05)');
+            
+            const compareGradient = ctx.createRadialGradient(
+                0, 0, 0,
+                0, 0, 150
+            );
+            compareGradient.addColorStop(0, 'rgba(236, 72, 153, 0.3)');
+            compareGradient.addColorStop(1, 'rgba(236, 72, 153, 0.05)');
+            
+            comparisonChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['创意', '分析', '领导', '协作', '执行', '适应'],
+                    datasets: [
+                        {
+                            label: `${mainType} (你)`,
+                            data: mainData.data,
+                            backgroundColor: mainGradient,
+                            borderColor: 'rgba(139, 92, 246, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(139, 92, 246, 1)',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: `${compareType} (对比)`,
+                            data: compareData.data,
+                            backgroundColor: compareGradient,
+                            borderColor: 'rgba(236, 72, 153, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(236, 72, 153, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(236, 72, 153, 1)',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    family: 'Inter, system-ui, sans-serif',
+                                    size: 12
+                                },
+                                color: '#6B7280'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1F2937',
+                            bodyColor: '#4B5563',
+                            borderColor: '#E5E7EB',
+                            borderWidth: 1,
+                            padding: 12,
+                            boxPadding: 6,
+                            usePointStyle: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart',
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+            
+            return comparisonChart;
+        }
+        
+        // Initialize Career Chart
+        function initCareerChart(type = 'INFP') {
+            const ctx = document.getElementById('career-chart').getContext('2d');
+            
+            // Get chart data for the given type or use INFP as default
+            const chartData = careerChartData[type] || careerChartData['INFP'];
+            
+            // Create gradient for radar chart
+            const gradient = ctx.createRadialGradient(
+                0, 0, 0,
+                0, 0, 150
+            );
+            gradient.addColorStop(0, chartData.color.replace('1)', '0.3)'));
+            gradient.addColorStop(1, chartData.color.replace('1)', '0.05)'));
+            
+            const careerChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['创意', '分析', '领导', '协作', '执行', '适应'],
+                    datasets: [{
+                        label: chartData.label,
+                        data: chartData.data,
+                        backgroundColor: gradient,
+                        borderColor: chartData.color,
+                        borderWidth: 2,
+                        pointBackgroundColor: chartData.color,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: chartData.color,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    family: 'Inter, system-ui, sans-serif',
+                                    size: 12
+                                },
+                                color: '#6B7280'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1F2937',
+                            bodyColor: '#4B5563',
+                            borderColor: '#E5E7EB',
+                            borderWidth: 1,
+                            padding: 12,
+                            boxPadding: 6,
+                            usePointStyle: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart',
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+            
+            return careerChart;
         }
         
         // Event Listeners
@@ -1152,9 +5164,6 @@
                 loadingScreen.classList.add('hidden');
                 showScreen('welcome-screen');
             }, 1500);
-            
-            // Initialize career chart
-            initCareerChart();
         });
         
         startTestBtn.addEventListener('click', () => {
@@ -1203,6 +5212,10 @@
         
         viewReportBtn.addEventListener('click', () => {
             showScreen('report-screen');
+            // Update report content with current MBTI type
+            updateReportContent(currentMbtiType);
+            // Initialize career chart with current MBTI type
+            initCareerChart(currentMbtiType);
         });
         
         shareResultBtn.addEventListener('click', () => {
@@ -1216,7 +5229,14 @@
 
         
         saveReportBtn.addEventListener('click', () => {
-            showModal('报告已保存到您的设备');
+            // 保存报告为图片
+            html2canvas(document.querySelector('#report-screen .bg-white.rounded-2xl.shadow-md')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `MBTI_${currentMbtiType}_报告.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showModal('报告已保存到您的设备');
+            });
         });
         
         shareReportBtn.addEventListener('click', () => {
@@ -1228,7 +5248,14 @@
         });
         
         saveCardBtn.addEventListener('click', () => {
-            showModal('人格卡片已保存到相册');
+            // 保存人格卡片为图片
+            html2canvas(document.querySelector('#share-screen .bg-white.rounded-2xl.shadow-lg.overflow-hidden.mb-6')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `MBTI_${currentMbtiType}_人格卡片.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showModal('人格卡片已保存到相册');
+            });
         });
         
         copyCaptionBtn.addEventListener('click', () => {
@@ -1240,6 +5267,13 @@
                     showModal('复制失败，请手动复制');
                     console.error('Failed to copy: ', err);
                 });
+        });
+        
+        // Type Comparison Select Change Event
+        document.getElementById('compare-type').addEventListener('change', function() {
+            const compareType = this.value;
+            initComparisonChart(currentMbtiType, compareType);
+            updateTypeComparison(currentMbtiType, compareType);
         });
         
         closeModalBtn.addEventListener('click', hideModal);
