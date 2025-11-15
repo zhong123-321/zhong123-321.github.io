@@ -5230,13 +5230,77 @@
         
         saveReportBtn.addEventListener('click', () => {
             // 保存报告为图片
-            html2canvas(document.querySelector('#report-screen .bg-white.rounded-2xl.shadow-md')).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `MBTI_${currentMbtiType}_报告.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                showModal('报告已保存到您的设备');
-            });
+            showModal('正在生成报告图片，请稍候...');
+            
+            // 延迟以确保所有内容（特别是图表）都已渲染完成
+            setTimeout(() => {
+                const reportElement = document.querySelector('#report-screen .bg-white.rounded-2xl.shadow-md');
+                
+                if (!reportElement) {
+                    hideModal();
+                    showModal('无法找到报告内容，请重试', null, false);
+                    return;
+                }
+                
+                // 配置html2canvas以提高手机端兼容性
+                const html2canvasOptions = {
+                    useCORS: true,
+                    logging: false,
+                    scale: window.devicePixelRatio || 1,
+                    letterRendering: true,
+                    width: reportElement.offsetWidth,
+                    height: reportElement.offsetHeight,
+                    windowWidth: document.documentElement.clientWidth,
+                    windowHeight: document.documentElement.clientHeight
+                };
+                
+                html2canvas(reportElement, html2canvasOptions)
+                    .then(canvas => {
+                        hideModal();
+                        
+                        // 尝试使用toBlob方法，这在某些移动浏览器中更可靠
+                        canvas.toBlob(blob => {
+                            const link = document.createElement('a');
+                            const url = URL.createObjectURL(blob);
+                            
+                            link.download = `MBTI_${currentMbtiType}_报告.png`;
+                            link.href = url;
+                            
+                            // 在手机端，直接点击可能无法触发下载，使用dispatchEvent
+                            const event = new MouseEvent('click', {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window
+                            });
+                            
+                            link.dispatchEvent(event);
+                            
+                            // 清理
+                            setTimeout(() => {
+                                URL.revokeObjectURL(url);
+                            }, 100);
+                            
+                            showModal('报告已保存到您的设备');
+                            
+                            // 对于iOS设备，提供额外的提示
+                            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                                setTimeout(() => {
+                                    showModal('提示', '在iOS设备上，您可能需要长按图片并选择"保存图片"');
+                                }, 1500);
+                            }
+                        }, 'image/png');
+                    })
+                    .catch(err => {
+                        hideModal();
+                        console.error('保存报告失败:', err);
+                        showModal('保存失败', '请重试或截图保存', false);
+                        
+                        // 提供备选方案
+                        setTimeout(() => {
+                            showModal('备选方案', '您可以尝试：<br>1. 截图保存<br>2. 确保浏览器允许下载<br>3. 尝试使用Chrome浏览器', false);
+                        }, 2000);
+                    });
+            }, 1000); // 1秒延迟，确保图表渲染完成
         });
         
         shareReportBtn.addEventListener('click', () => {
@@ -5249,13 +5313,77 @@
         
         saveCardBtn.addEventListener('click', () => {
             // 保存人格卡片为图片
-            html2canvas(document.querySelector('#share-screen .bg-white.rounded-2xl.shadow-lg.overflow-hidden.mb-6')).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `MBTI_${currentMbtiType}_人格卡片.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                showModal('人格卡片已保存到相册');
-            });
+            showModal('正在生成人格卡片，请稍候...');
+            
+            // 延迟以确保所有内容都已渲染完成
+            setTimeout(() => {
+                const cardElement = document.querySelector('#share-screen .bg-white.rounded-2xl.shadow-lg.overflow-hidden.mb-6');
+                
+                if (!cardElement) {
+                    hideModal();
+                    showModal('无法找到人格卡片，请重试', null, false);
+                    return;
+                }
+                
+                // 配置html2canvas以提高手机端兼容性
+                const html2canvasOptions = {
+                    useCORS: true,
+                    logging: false,
+                    scale: window.devicePixelRatio || 1,
+                    letterRendering: true,
+                    width: cardElement.offsetWidth,
+                    height: cardElement.offsetHeight,
+                    windowWidth: document.documentElement.clientWidth,
+                    windowHeight: document.documentElement.clientHeight
+                };
+                
+                html2canvas(cardElement, html2canvasOptions)
+                    .then(canvas => {
+                        hideModal();
+                        
+                        // 尝试使用toBlob方法，这在某些移动浏览器中更可靠
+                        canvas.toBlob(blob => {
+                            const link = document.createElement('a');
+                            const url = URL.createObjectURL(blob);
+                            
+                            link.download = `MBTI_${currentMbtiType}_人格卡片.png`;
+                            link.href = url;
+                            
+                            // 在手机端，直接点击可能无法触发下载，使用dispatchEvent
+                            const event = new MouseEvent('click', {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window
+                            });
+                            
+                            link.dispatchEvent(event);
+                            
+                            // 清理
+                            setTimeout(() => {
+                                URL.revokeObjectURL(url);
+                            }, 100);
+                            
+                            showModal('人格卡片已保存到相册');
+                            
+                            // 对于iOS设备，提供额外的提示
+                            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                                setTimeout(() => {
+                                    showModal('提示', '在iOS设备上，您可能需要长按图片并选择"保存图片"');
+                                }, 1500);
+                            }
+                        }, 'image/png');
+                    })
+                    .catch(err => {
+                        hideModal();
+                        console.error('保存人格卡片失败:', err);
+                        showModal('保存失败', '请重试或截图保存', false);
+                        
+                        // 提供备选方案
+                        setTimeout(() => {
+                            showModal('备选方案', '您可以尝试：<br>1. 截图保存<br>2. 确保浏览器允许下载<br>3. 尝试使用Chrome浏览器', false);
+                        }, 2000);
+                    });
+            }, 500); // 0.5秒延迟，确保内容渲染完成
         });
         
         copyCaptionBtn.addEventListener('click', () => {
