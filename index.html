@@ -267,19 +267,19 @@
                     </div>
                     <div class="flex justify-between gap-2">
                         <button class="option-btn flex-1 py-3 border border-gray-200 rounded-xl text-center hover:border-primary hover:bg-primaryLight transition-all-300" data-value="E1">
-                            <span class="font-medium">1</span>
+                            <span class="font-medium"><i class="fa fa-star-o text-yellow-400"></i></span>
                         </button>
                         <button class="option-btn flex-1 py-3 border border-gray-200 rounded-xl text-center hover:border-primary hover:bg-primaryLight transition-all-300" data-value="E2">
-                            <span class="font-medium">2</span>
+                            <span class="font-medium"><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i></span>
                         </button>
                         <button class="option-btn flex-1 py-3 border border-gray-200 rounded-xl text-center hover:border-primary hover:bg-primaryLight transition-all-300" data-value="E3">
-                            <span class="font-medium">3</span>
+                            <span class="font-medium"><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i></span>
                         </button>
                         <button class="option-btn flex-1 py-3 border border-gray-200 rounded-xl text-center hover:border-primary hover:bg-primaryLight transition-all-300" data-value="E4">
-                            <span class="font-medium">4</span>
+                            <span class="font-medium"><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i></span>
                         </button>
                         <button class="option-btn flex-1 py-3 border border-gray-200 rounded-xl text-center hover:border-primary hover:bg-primaryLight transition-all-300" data-value="E5">
-                            <span class="font-medium">5</span>
+                            <span class="font-medium"><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i><i class="fa fa-star-o text-yellow-400"></i></span>
                         </button>
                     </div>
                     <p class="text-center text-sm text-gray-600 mt-2">主动与他人交流，享受热闹氛围</p>
@@ -5207,6 +5207,18 @@
                 // Update button state
                 optionBtns.forEach(b => b.classList.remove('selected', 'border-primary', 'bg-primaryLight'));
                 btn.classList.add('selected', 'border-primary', 'bg-primaryLight');
+                
+                // Auto proceed to next question after selection
+                setTimeout(() => {
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        showQuestion(currentQuestionIndex);
+                    } else {
+                        // Calculate and show result
+                        const mbtiType = calculateMBTI();
+                        showResult(mbtiType);
+                    }
+                }, 500); // Small delay for visual feedback
             });
         });
         
